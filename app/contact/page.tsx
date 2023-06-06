@@ -7,13 +7,13 @@ import { Card } from "../components/card";
 const socials = [
 	{
 		icon: <Youtube size={20} />,
-		href: "https://youtube.com/codingdud",
+		href: "https://youtube.com/@codingdud",
 		label: "Youtube",
 		handle: "@codingdud",
 	},
 	{
 		icon: <Mail size={20} />,
-		href: "codingdud@gmail.com",
+		href: "mailto:codingdud@gmail.com",
 		label: "Email",
 		handle: "cogingdud@gmail.com",
 	},
