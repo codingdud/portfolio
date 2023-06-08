@@ -35,10 +35,9 @@ export default function Home() {
 			<div className="hidden w-screen h-px animate-glow md:block animate-fade-right bg-gradient-to-r from-zinc-300/0 via-zinc-300/50 to-zinc-300/0" />
 			<div className="my-16 text-center animate-fade-in">
 				<h2 className="text-sm text-zinc-500 ">
-				Welcome to Codingdud, <br />your one-stop solution for all your
-full stage web app development needs.<br />
-use the latest technologies and frameworks to ensure that
-your web app is fast, secure, and reliable.
+				Welcome to Codingdud, <br /> 
+				I am a NextJS developer with a passion for machine learning and artificial intelligence.<br />
+				I am always open to new opportunities to work on exciting projects that challenge me and allow me to grow as a developer.
 					{/* solutions at{" "}
 					<Link
 						target="_blank"
