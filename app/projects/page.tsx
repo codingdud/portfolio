@@ -23,8 +23,8 @@ export default async function ProjectsPage() {
 	const featured = allProjects.find(
 		(project) => project.slug === "contact",
 	)!;
-	const top2 = allProjects.find((project) => project.slug === "highstorm")!;
-	const top3 = allProjects.find((project) => project.slug === "envshare")!;
+	const top2 = allProjects.find((project) => project.slug === "hrms")!;
+	const top3 = allProjects.find((project) => project.slug === "codingdud.co")!;
 	const sorted = allProjects
 		.filter((p) => p.published)
 		.filter(
