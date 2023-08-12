@@ -7,7 +7,8 @@ My personal website, built with [Next.js](https://nextjs.org/), [Tailwind CSS](h
 \
 
 
-\[![Deploy with Vercel](https://vercel.com/button)]
+\  
+[![Deploy with Vercel](https://vercel.com/button)]
 
 ### Running Locally
 
