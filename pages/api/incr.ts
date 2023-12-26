@@ -1,11 +1,6 @@
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
-//const redis = Redis.fromEnv();
-
-const redis = new Redis({
-  url: 'https://us1-still-rhino-37855.upstash.io',
-  token: '48f3ebf1f21744d586e0037d80a3e251',
-})
+const redis = Redis.fromEnv();
 
 export const config = {
 	runtime: "edge",
