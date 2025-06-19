@@ -1,0 +1,392 @@
+---
+title: 📚 Guide to Contributing to a GitHub Project
+description: Contributing to an open-source project on GitHub is a rewarding way to improve your coding skills, collaborate with others, and give back to the community. This guide walks you through the essential steps to contribute effectively using Git and GitHub.
+---
+
+## 🔁 Step 1: Fork the Project
+
+If you don’t have write access to a project, **fork** it first:
+
+1. Go to the project’s GitHub page.
+2. Click the **Fork** button in the top-right corner.
+
+> 💡 A fork is your personal copy of the repository where you can make changes freely.
+
+---
+
+## 🌲 Step 2: Clone Your Fork Locally
+
+To work on the code, clone your forked repository to your local machine:
+
+```bash
+git clone https://github.com/your-username/project-name.git
+cd project-name
+```
+
+---
+
+## 🧵 Step 3: Create a Topic Branch
+
+Always create a new branch for each contribution. Use a descriptive name that reflects the change:
+
+```bash
+git checkout -b feature/change-delay-time
+```
+
+---
+
+## 🛠️ Step 4: Make Your Changes
+
+Edit files, fix bugs, or implement features. For example:
+
+```bash
+sed -i 's/1000/3000/' blink.ino
+```
+
+Check your changes before committing:
+
+```bash
+git diff --word-diff
+```
+
+---
+
+## ✅ Step 5: Commit Your Changes
+
+Commit your updates with a clear message:
+
+```bash
+git commit -a -m "Change delay to 3 seconds"
+```
+
+---
+
+## ☁️ Step 6: Push Your Branch to GitHub
+
+Push your topic branch to your fork on GitHub:
+
+```bash
+git push origin feature/change-delay-time
+```
+
+---
+
+## 📬 Step 7: Open a Pull Request (PR)
+
+After pushing, GitHub will prompt you to create a Pull Request. Follow these steps:
+
+1. Go to your GitHub fork.
+2. Click the green **Compare & pull request** button.
+3. Add a title and description explaining your changes.
+4. Click **Create pull request**.
+
+> 📝 A good PR description helps maintainers understand what you did and why.
+
+---
+
+## 💬 Step 8: Participate in Code Review
+
+Once your PR is open:
+
+- The project maintainer may review and comment.
+- You can respond to feedback directly or by making additional commits.
+- Push more changes to the same branch to update the PR automatically.
+
+Example:
+```bash
+git commit -a -m "Fix spacing in README.md"
+git push origin feature/change-delay-time
+```
+
+---
+
+## 🔄 Step 9: Keep Your PR Updated
+
+If your branch falls behind the main project:
+
+1. Add the original repo as a remote:
+   ```bash
+   git remote add upstream https://github.com/original-owner/project-name.git
+   ```
+
+2. Fetch and merge the latest changes:
+   ```bash
+   git fetch upstream
+   git merge upstream/master
+   ```
+
+3. Fix any conflicts and push again:
+   ```bash
+   git push origin feature/change-delay-time
+   ```
+
+---
+
+## 🧩 Step 10: PR Merged or Closed
+
+The maintainer will either:
+
+- ✅ Merge your PR into the main project.
+- ❌ Close the PR if changes are not needed or further work is required.
+
+You’ll receive a notification either way.
+
+---
+
+## 🧠 Advanced Tips
+
+### 🔁 Rebase vs. Merge
+
+While merging is common on GitHub, rebasing can clean up history. If you rebase:
+
+1. Push to a **new branch**, not the one used in the PR.
+2. Open a new PR referencing the old one.
+
+Example:
+```bash
+git checkout -b feature/change-delay-rebased
+git rebase master
+git push origin feature/change-delay-rebased
+```
+
+Then link the new PR to the old one:
+```md
+This replaces #123.
+```
+
+### 🔗 Referencing Issues and PRs
+
+You can reference other issues or PRs using `#<number>`:
+
+```md
+Fixes #45
+See also tonychacon/blink#123
+```
+
+GitHub will auto-link them!
+
+---
+
+## ✍️ GitHub Flavored Markdown (GFM) Tips
+
+Use Markdown to format your PR descriptions and comments:
+
+### Task Lists
+```markdown
+- [x] Update documentation
+- [ ] Add tests
+- [ ] Fix linter warnings
+```
+
+### Code Snippets
+```markdown
+```java
+System.out.println("Hello World");
+```
+```
+
+### Quoting
+```markdown
+> This part needs improvement
+```
+
+### Emoji
+Add some personality! 😄
+```markdown
+:+1: :bug: :rocket:
+```
+
+---
+
+## 🖼️ Drag and Drop Images
+
+GitHub lets you drag and drop images directly into comments. It’s perfect for screenshots or diagrams.
+
+---
+
+## 🔄 Syncing Your Fork
+
+Keep your fork updated with the original project:
+
+1. Add the upstream remote:
+   ```bash
+   git remote add upstream https://github.com/original-owner/project-name.git
+   ```
+
+2. Periodically sync:
+   ```bash
+   git checkout master
+   git pull upstream master
+   git push origin master
+   ```
+
+---
+
+## 🏁 Summary
+
+| Step | Action |
+|------|--------|
+| 1    | Fork the project |
+| 2    | Clone your fork |
+| 3    | Create a topic branch |
+| 4    | Make and commit changes |
+| 5    | Push your branch |
+| 6    | Open a Pull Request |
+| 7    | Respond to reviews |
+| 8    | Keep your PR updated |
+| 9    | Wait for merge/close |
+
+---
+
+## 🧰 Tools & Resources
+
+- [GitHub CLI](https://cli.github.com): Manage PRs from the command line.
+- [GitHub Markdown Cheatsheet](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github)
+- [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
+
+# Mentioning Issues in Commit Messages & Contributing to Projects on GitHub
+
+Contributing to a project on GitHub often involves making changes that relate to specific issues or bugs. Properly mentioning these issues in your commit messages or pull requests helps maintain clarity and traceability for the entire team.
+
+This guide explains how to reference issues in commit messages and during the contribution process.
+
+---
+
+## 📌 Why Mention Issues?
+
+When you mention an issue in a commit message or pull request, you:
+
+- **Link your work** directly to the problem it solves.
+- Help maintainers understand **why** a change was made.
+- Automatically update issue threads with links to your commits or PRs.
+- Enable **automatic closure** of issues when your code is merged.
+
+---
+
+## 🔗 How to Reference an Issue in a Commit Message
+
+GitHub recognizes certain keywords followed by an issue number in commit messages. These can be used to automatically link or close issues.
+
+### ✅ Supported Keywords:
+- `close`
+- `closes`
+- `closed`
+- `fix`
+- `fixes`
+- `fixed`
+- `resolve`
+- `resolves`
+- `resolved`
+
+### 🧾 Syntax:
+Use one of the keywords followed by `#<issue-number>`.  
+You can also reference issues from other repositories using `username/repo#<issue-number>`.
+
+### 💡 Example Commit Messages:
+```bash
+git commit -m "Fix bug in login flow. Closes #45"
+```
+
+```bash
+git commit -m "Update dependencies. Fixes tonychacon/blink#12"
+```
+
+If this commit is pushed to a branch and later merged into the default branch (e.g., `main` or `master`), **the referenced issue will be automatically closed**.
+
+---
+
+## 🔄 Referencing Issues Without Closing Them
+
+If you want to reference an issue without closing it, just use the `#<number>` syntax without any keyword.
+
+### 💬 Example:
+```bash
+git commit -m "Started refactoring auth system. See #30 for discussion."
+```
+
+This will create a link in the issue thread but won’t close the issue.
+
+---
+
+## 📥 Using Issue References in Pull Requests
+
+When creating or updating a Pull Request:
+
+- In the **title or description**, include `Closes #<issue-number>` to indicate that merging the PR will resolve the issue.
+- You can also mention multiple issues:
+  ```md
+  This fixes #12 and addresses #45.
+  ```
+
+> 💡 Tip: When you merge a PR that says `Closes #12`, GitHub will automatically close Issue #12 and link back to the PR from the issue.
+
+---
+
+## 🎯 Best Practices
+
+- Always write **clear, descriptive commit messages** even if you reference an issue.
+- Use `Closes #<issue>` only when your change fully resolves the issue.
+- If you're working across forks or repositories, use full references like `username/repo#12`.
+- You can reference **multiple issues** in a single commit or PR:
+  ```bash
+  git commit -m "Fix performance issues. Closes #10, #12"
+  ```
+
+---
+
+## 🧩 Real-World Example
+
+Let’s say there's [Issue #45](https://github.com/tonychacon/blink/issues/45) titled *"LED blinks too fast"*. You’ve fixed this in your branch.
+
+### Your Commit:
+```bash
+git commit -m "Change delay time from 1s to 3s. Closes #45"
+```
+
+After pushing and opening a PR, when the maintainer merges your change:
+
+- The issue will be **automatically closed**.
+- A comment will appear on Issue #45 linking back to your commit and PR.
+
+---
+
+## 📋 Summary Table
+
+| Action | Syntax | Effect |
+|-------|--------|--------|
+| Close issue | `Closes #12` | Issue closes when commit is merged |
+| Link without closing | `See #12` | Adds a link in the issue |
+| Reference cross-repo | `user/repo#12` | Links to another repo's issue |
+| Multiple issues | `Closes #12, #15` | Closes both issues |
+
+---
+
+## 🧠 Advanced Tips
+
+- You can reference **commits** using their full SHA hash. GitHub will auto-link them.
+- Use task lists in PR descriptions to track what needs to be done before merging:
+  ```markdown
+  - [x] Fix bug
+  - [ ] Add tests
+  - [ ] Update documentation
+  ```
+- Use emojis in comments or commit messages to add personality:
+  ```bash
+  git commit -m "🎉 Initial implementation complete"
+  ```
+
+---
+
+## 📚 Learn More
+
+- [GitHub Flavored Markdown Docs](https://docs.github.com/en/get-started/writing-on-github)
+- [Git Commit Message Conventions](https://www.conventionalcommits.org/)
+- [GitHub Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
+
+---
+
+## ✅ Final Thoughts
+
+Mentioning issues in your commit messages and pull requests is a small step that significantly improves collaboration. It ensures transparency, keeps discussions connected to the actual code changes, and streamlines issue management.
+
+Happy contributing! 🚀

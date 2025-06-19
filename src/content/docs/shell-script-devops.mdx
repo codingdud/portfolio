@@ -1,0 +1,1302 @@
+---
+title: Linux Shell Scripting Essentials for DevOps
+description: A comprehensive guide to mastering shell scripting for DevOps engineers. This guide covers everything from basic commands to advanced scripting techniques with practical examples.
+---
+
+## Table of Contents
+
+1. [Introduction to Shell Scripting](#introduction-to-shell-scripting)
+2. [Shell Script Fundamentals](#shell-script-fundamentals)
+3. [I/O, Redirection, Pipes, and Filters](#io-redirection-pipes-and-filters)
+4. [Control Flow and Advanced Scripting](#control-flow-and-advanced-scripting)
+5. [Modularization and Debugging](#modularization-and-debugging)
+6. [Environment Customization](#environment-customization)
+7. [File System Operations](#file-system-operations)
+8. [Process Management](#process-management)
+9. [Task Scheduling and Automation](#task-scheduling-and-automation)
+10. [Advanced DevOps Techniques](#advanced-devops-techniques)
+
+---
+
+
+## Introduction to Shell Scripting
+
+### What is Shell Scripting?
+
+A **shell** is the command-line interface between the user and the Linux OS kernel. Shell scripting involves writing plain-text files containing a series of shell commands that are executed in order by the shell interpreter.
+
+**Popular Shells:**
+- `sh` (Bourne Shell)
+- `bash` (Bourne Again Shell) - Default on most Linux systems
+- `zsh` (Z Shell)
+- `csh` (C Shell)
+- `ksh` (Korn Shell)
+
+**Why Shell Scripting for DevOps?**
+- Automate repetitive tasks
+- Manage system operations
+- Create complex workflows
+- Glue together different tools and services
+- Infrastructure as Code (IaC)
+
+---
+
+## Shell Script Fundamentals
+
+### Creating and Running Scripts
+
+Every shell script should start with a **shebang** (`#!`):
+
+```bash
+#!/bin/bash
+echo "Hello, DevOps World!"
+```
+
+Make the script executable and run it:
+
+```bash
+chmod u+x script.sh
+./script.sh
+```
+
+### Variables and Data Types
+
+**Basic Variables:**
+```bash
+# No spaces around =
+name="DevOps"
+version=1.0
+echo "Welcome to $name v$version"
+```
+
+**Reading User Input:**
+```bash
+read -p "Enter your deployment environment: " env
+echo "Deploying to: $env"
+```
+
+**Constants:**
+```bash
+readonly CONFIG_FILE="/etc/myapp/config.yml"
+declare -r MAX_RETRIES=3
+```
+
+### Built-in Shell Variables
+
+Essential variables for DevOps scripts:
+
+```bash
+echo "Home directory: $HOME"
+echo "Current directory: $PWD"
+echo "Search path: $PATH"
+echo "Bash version: $BASH_VERSION"
+echo "Last command exit code: $?"
+echo "Process ID: $$"
+echo "Script name: $0"
+echo "All arguments: $@"
+echo "Number of arguments: $#"
+```
+
+### Operators
+
+**Arithmetic Operators:**
+```bash
+a=10
+b=3
+echo $((a + b))   # Addition: 13
+echo $((a - b))   # Subtraction: 7
+echo $((a * b))   # Multiplication: 30
+echo $((a / b))   # Division: 3
+echo $((a % b))   # Modulus: 1
+echo $((a ** b))  # Exponentiation: 1000
+```
+
+**Comparison Operators:**
+```bash
+# Numeric comparisons
+if [ $a -eq $b ]; then echo "Equal"; fi
+if [ $a -ne $b ]; then echo "Not equal"; fi
+if [ $a -gt $b ]; then echo "Greater than"; fi
+if [ $a -ge $b ]; then echo "Greater or equal"; fi
+if [ $a -lt $b ]; then echo "Less than"; fi
+if [ $a -le $b ]; then echo "Less or equal"; fi
+
+# String comparisons
+str1="hello"
+str2="world"
+if [ "$str1" = "$str2" ]; then echo "Strings equal"; fi
+if [ "$str1" != "$str2" ]; then echo "Strings not equal"; fi
+if [ -n "$str1" ]; then echo "String not empty"; fi
+if [ -z "$str1" ]; then echo "String is empty"; fi
+```
+
+**Logical Operators:**
+```bash
+# AND, OR, NOT
+if [ $a -gt 5 ] && [ $b -lt 10 ]; then
+    echo "Both conditions true"
+fi
+
+if [ $a -gt 20 ] || [ $b -lt 5 ]; then
+    echo "At least one condition true"
+fi
+
+if ! [ $a -eq 0 ]; then
+    echo "a is not zero"
+fi
+```
+
+---
+
+## I/O, Redirection, Pipes, and Filters
+
+### Standard Streams
+
+Every process has three standard streams:
+
+<table>
+  <thead>
+    <tr>
+      <th>Stream</th>
+      <th>File Descriptor</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>stdin</td>
+      <td>0</td>
+      <td>Standard input</td>
+    </tr>
+    <tr>
+      <td>stdout</td>
+      <td>1</td>
+      <td>Standard output</td>
+    </tr>
+    <tr>
+      <td>stderr</td>
+      <td>2</td>
+      <td>Standard error</td>
+    </tr>
+  </tbody>
+</table>
+
+### Redirection
+
+**Output Redirection:**
+```sh
+# Redirect stdout to file (overwrite)
+echo "Deployment log" > deploy.log
+
+# Redirect stdout to file (append)
+echo "Another entry" >> deploy.log
+
+# Redirect stderr to file
+command_that_fails 2> error.log
+
+# Redirect both stdout and stderr
+command > output.log 2>&1
+
+# Redirect stderr to stdout
+command 2>&1 | tee combined.log
+```
+
+**Input Redirection:**
+```bash
+# Read from file
+mysql -u user -p database < schema.sql
+
+# Here document
+cat << EOF > config.yml
+database:
+  host: localhost
+  port: 3306
+EOF
+```
+
+### Pipes and Pipelines
+
+Connect commands with pipes (`|`):
+
+```bash
+# Monitor error logs
+tail -f /var/log/nginx/error.log | grep "404" | head -10
+
+# Process system information
+ps aux | grep nginx | awk '{print $2}' | xargs kill
+
+# Analyze disk usage
+du -sh /var/log/* | sort -hr | head -5
+```
+
+### Filters and Text Processing
+
+**grep - Pattern Searching:**
+```bash
+# Case-insensitive search
+grep -i "error" /var/log/syslog
+
+# Show line numbers
+grep -n "failed" /var/log/auth.log
+
+# Recursive search
+grep -r "TODO" /opt/myapp/
+
+# Count matches
+grep -c "200" /var/log/nginx/access.log
+
+# Invert match (show non-matching lines)
+grep -v "INFO" /var/log/application.log
+```
+
+**sed - Stream Editor:**
+```bash
+# Replace text
+sed 's/old_domain/new_domain/g' config.txt
+
+# Delete lines containing pattern
+sed '/^#/d' config.conf
+
+# Insert line after pattern
+sed '/\[database\]/a host=localhost' config.ini
+
+# In-place editing
+sed -i 's/DEBUG/INFO/g' /etc/myapp/config.conf
+```
+
+**awk - Pattern Processing:**
+```bash
+# Print specific columns
+awk '{print $1, $4}' /var/log/nginx/access.log
+
+# Process CSV files
+awk -F',' '{print $2}' users.csv
+
+# Calculate totals
+awk '{sum += $3} END {print "Total:", sum}' numbers.txt
+
+# Conditional processing
+awk '$9 >= 400 {print $0}' /var/log/nginx/access.log
+```
+
+**sort and uniq:**
+```bash
+# Sort and remove duplicates
+sort users.txt | uniq
+
+# Count occurrences
+sort /var/log/nginx/access.log | uniq -c | sort -nr
+
+# Sort by numeric value
+sort -n numbers.txt
+
+# Sort by specific field
+sort -k2 -n data.txt
+```
+
+**tr - Character Translation:**
+```bash
+# Convert to uppercase
+tr '[:lower:]' '[:upper:]' < file.txt
+
+# Remove characters
+tr -d '[:space:]' < file.txt
+
+# Replace characters
+tr ' ' '_' < filename.txt
+```
+
+**head and tail:**
+```bash
+# View first 20 lines
+head -20 /var/log/syslog
+
+# View last 50 lines
+tail -50 /var/log/nginx/error.log
+
+# Follow log files (real-time)
+tail -f /var/log/application.log
+
+# Follow multiple files
+tail -f /var/log/nginx/*.log
+```
+
+**cut - Column Extraction:**
+```bash
+# Extract by delimiter
+cut -d':' -f1,3 /etc/passwd
+
+# Extract by character position
+cut -c1-10 file.txt
+
+# Extract username from /etc/passwd
+cut -d':' -f1 /etc/passwd | sort
+```
+
+---
+
+## Control Flow and Advanced Scripting
+
+### Exit Codes
+
+Every command returns an exit code (`$?`). 0 means success, non-zero indicates failure:
+
+```bash
+#!/bin/bash
+service nginx status
+if [ $? -eq 0 ]; then
+    echo "Nginx is running"
+else
+    echo "Nginx is not running"
+    exit 1
+fi
+
+# Explicit exit
+exit 0  # Success
+exit 1  # General error
+exit 2  # Misuse of shell command
+```
+
+### Testing and Conditionals
+
+**File Tests:**
+```bash
+if [ -f "/etc/nginx/nginx.conf" ]; then
+    echo "Nginx config exists"
+fi
+
+if [ -d "/var/log/nginx" ]; then
+    echo "Nginx log directory exists"
+fi
+
+if [ -r "/etc/passwd" ]; then
+    echo "Can read passwd file"
+fi
+
+if [ -w "/tmp" ]; then
+    echo "Can write to tmp"
+fi
+
+if [ -x "/usr/bin/docker" ]; then
+    echo "Docker is executable"
+fi
+```
+
+**Advanced Test Conditions:**
+```bash
+# File is newer than another
+if [ file1.txt -nt file2.txt ]; then
+    echo "file1 is newer"
+fi
+
+# File is older than another
+if [ file1.txt -ot file2.txt ]; then
+    echo "file1 is older"
+fi
+
+# Files are the same
+if [ file1.txt -ef file2.txt ]; then
+    echo "Files are the same"
+fi
+```
+
+### Conditional Statements
+
+**if/elif/else:**
+```bash
+#!/bin/bash
+check_service() {
+    local service=$1
+    
+    if systemctl is-active --quiet $service; then
+        echo "$service is running"
+        return 0
+    elif systemctl is-enabled --quiet $service; then
+        echo "$service is enabled but not running"
+        return 1
+    else
+        echo "$service is disabled"
+        return 2
+    fi
+}
+
+check_service "nginx"
+```
+
+### Arrays
+
+**Indexed Arrays:**
+```bash
+#!/bin/bash
+# Declare array
+services=("nginx" "mysql" "redis" "docker")
+
+# Access elements
+echo "First service: ${services[0]}"
+echo "All services: ${services[@]}"
+echo "Number of services: ${#services[@]}"
+
+# Add element
+services+=("mongodb")
+
+# Loop through array
+for service in "${services[@]}"; do
+    echo "Checking $service..."
+    systemctl status $service
+done
+```
+
+**Associative Arrays (Bash 4+):**
+```bash
+#!/bin/bash
+# Declare associative array
+declare -A config
+config[database_host]="localhost"
+config[database_port]="3306"
+config[database_name]="myapp"
+
+# Access values
+echo "DB Host: ${config[database_host]}"
+
+# Get all keys
+for key in "${!config[@]}"; do
+    echo "$key = ${config[$key]}"
+done
+```
+
+### Loops
+
+**for Loop:**
+```bash
+# Loop through files
+for logfile in /var/log/*.log; do
+    echo "Processing $logfile"
+    gzip "$logfile"
+done
+
+# Loop through range
+for i in {1..10}; do
+    echo "Iteration $i"
+done
+
+# C-style for loop
+for ((i=1; i<=5; i++)); do
+    echo "Counter: $i"
+done
+```
+
+**while Loop:**
+```bash
+#!/bin/bash
+# Monitor disk usage
+while true; do
+    usage=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
+    if [ $usage -gt 80 ]; then
+        echo "WARNING: Disk usage is ${usage}%"
+        # Send alert
+    fi
+    sleep 300  # Check every 5 minutes
+done
+```
+
+**until Loop:**
+```bash
+#!/bin/bash
+# Wait for service to be ready
+until curl -s http://localhost:8080/health > /dev/null; do
+    echo "Waiting for service to be ready..."
+    sleep 5
+done
+echo "Service is ready!"
+```
+
+**select Loop (Menus):**
+```bash
+#!/bin/bash
+PS3="Select an action: "
+select action in "Deploy" "Rollback" "Status" "Exit"; do
+    case $action in
+        "Deploy")
+            echo "Starting deployment..."
+            break
+            ;;
+        "Rollback")
+            echo "Rolling back..."
+            break
+            ;;
+        "Status")
+            echo "Checking status..."
+            ;;
+        "Exit")
+            exit 0
+            ;;
+        *)
+            echo "Invalid option"
+            ;;
+    esac
+done
+```
+
+### Case Statements
+
+```bash
+#!/bin/bash
+environment=$1
+
+case $environment in
+    "dev"|"development")
+        echo "Deploying to development"
+        CONFIG_FILE="/etc/myapp/dev.conf"
+        ;;
+    "staging"|"stage")
+        echo "Deploying to staging"
+        CONFIG_FILE="/etc/myapp/staging.conf"
+        ;;
+    "prod"|"production")
+        echo "Deploying to production"
+        CONFIG_FILE="/etc/myapp/prod.conf"
+        ;;
+    *)
+        echo "Unknown environment: $environment"
+        echo "Usage: $0 {dev|staging|prod}"
+        exit 1
+        ;;
+esac
+```
+
+### Functions
+
+**Basic Functions:**
+```bash
+#!/bin/bash
+
+# Function definition
+deploy_app() {
+    local app_name=$1
+    local version=$2
+    local environment=$3
+    
+    echo "Deploying $app_name version $version to $environment"
+    
+    # Validation
+    if [ -z "$app_name" ] || [ -z "$version" ] || [ -z "$environment" ]; then
+        echo "Error: Missing required parameters"
+        return 1
+    fi
+    
+    # Deployment logic here
+    echo "Deployment completed successfully"
+    return 0
+}
+
+# Function with return values
+get_container_status() {
+    local container_name=$1
+    local status=$(docker inspect --format='{{.State.Status}}' $container_name 2>/dev/null)
+    
+    if [ $? -eq 0 ]; then
+        echo $status
+        return 0
+    else
+        echo "not_found"
+        return 1
+    fi
+}
+
+# Usage
+deploy_app "myapp" "v1.2.3" "production"
+
+status=$(get_container_status "nginx")
+echo "Container status: $status"
+```
+
+---
+
+## Modularization and Debugging
+
+### Modularizing Scripts
+
+**Creating Utility Functions:**
+
+```bash
+# utils.sh
+#!/bin/bash
+
+# Logging functions
+log_info() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] INFO: $1" | tee -a /var/log/deploy.log
+}
+
+log_error() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: $1" | tee -a /var/log/deploy.log >&2
+}
+
+log_warn() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] WARN: $1" | tee -a /var/log/deploy.log
+}
+
+# Service management
+start_service() {
+    local service_name=$1
+    log_info "Starting service: $service_name"
+    
+    if systemctl start $service_name; then
+        log_info "Service $service_name started successfully"
+        return 0
+    else
+        log_error "Failed to start service: $service_name"
+        return 1
+    fi
+}
+
+# Health check
+health_check() {
+    local url=$1
+    local max_attempts=${2:-5}
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        log_info "Health check attempt $attempt/$max_attempts"
+        
+        if curl -s -o /dev/null -w "%{http_code}" $url | grep -q "200"; then
+            log_info "Health check passed"
+            return 0
+        fi
+        
+        sleep 5
+        ((attempt++))
+    done
+    
+    log_error "Health check failed after $max_attempts attempts"
+    return 1
+}
+```
+
+**Using Modular Scripts:**
+
+```bash
+#!/bin/bash
+# main-deploy.sh
+
+# Source utility functions
+source ./utils.sh
+
+# Main deployment script
+main() {
+    log_info "Starting deployment process"
+    
+    # Stop services
+    start_service "nginx" || exit 1
+    
+    # Deploy application
+    log_info "Deploying application..."
+    
+    # Health check
+    health_check "http://localhost:8080/health" 10
+    
+    log_info "Deployment completed successfully"
+}
+
+# Run main function
+main "$@"
+```
+
+### Command Line Arguments
+
+**Processing Arguments:**
+
+```bash
+#!/bin/bash
+
+# Default values
+ENVIRONMENT="dev"
+VERSION=""
+VERBOSE=false
+DRY_RUN=false
+
+# Function to show usage
+usage() {
+    cat << EOF
+Usage: $0 [OPTIONS]
+
+Options:
+    -e, --environment ENV    Target environment (dev, staging, prod)
+    -v, --version VERSION    Application version to deploy
+    -V, --verbose           Enable verbose output
+    -d, --dry-run           Show what would be done without executing
+    -h, --help              Show this help message
+
+Examples:
+    $0 -e prod -v v1.2.3
+    $0 --environment staging --version v1.2.3 --verbose
+EOF
+}
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -e|--environment)
+            ENVIRONMENT="$2"
+            shift 2
+            ;;
+        -v|--version)
+            VERSION="$2"
+            shift 2
+            ;;
+        -V|--verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -d|--dry-run)
+            DRY_RUN=true
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+# Validation
+if [ -z "$VERSION" ]; then
+    echo "Error: Version is required"
+    usage
+    exit 1
+fi
+
+# Use the arguments
+if [ "$VERBOSE" = true ]; then
+    echo "Environment: $ENVIRONMENT"
+    echo "Version: $VERSION"
+    echo "Dry Run: $DRY_RUN"
+fi
+```
+
+### Debugging Techniques
+
+**Debug Mode:**
+```bash
+#!/bin/bash
+
+# Enable debug mode
+set -x  # Print commands as they're executed
+set -e  # Exit on any error
+set -u  # Exit on undefined variables
+set -o pipefail  # Exit on pipe failures
+
+# Or combine them
+set -euxo pipefail
+
+# Debug function
+debug() {
+    if [ "${DEBUG:-}" = "true" ]; then
+        echo "DEBUG: $1" >&2
+    fi
+}
+
+# Usage
+DEBUG=true debug "Starting deployment process"
+```
+
+**Error Handling:**
+```bash
+#!/bin/bash
+
+# Error handling function
+error_handler() {
+    local line_number=$1
+    local error_code=$2
+    echo "Error on line $line_number: Command exited with status $error_code"
+    cleanup
+    exit $error_code
+}
+
+# Cleanup function
+cleanup() {
+    echo "Performing cleanup..."
+    # Remove temporary files
+    rm -f /tmp/deploy_*
+    # Stop background processes
+    jobs -p | xargs -r kill
+}
+
+# Set error trap
+trap 'error_handler ${LINENO} $?' ERR
+trap cleanup EXIT
+
+# Your script logic here
+echo "Starting deployment..."
+```
+
+**Logging and Monitoring:**
+```bash
+#!/bin/bash
+
+# Create log directory
+LOG_DIR="/var/log/myapp"
+mkdir -p $LOG_DIR
+
+# Set up logging
+exec 1> >(tee -a "$LOG_DIR/deployment.log")
+exec 2> >(tee -a "$LOG_DIR/deployment.log" >&2)
+
+# Function to log with timestamp
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
+}
+
+# Performance monitoring
+start_time=$(date +%s)
+
+# Your script logic here
+log "Starting deployment..."
+
+# Calculate execution time
+end_time=$(date +%s)
+execution_time=$((end_time - start_time))
+log "Deployment completed in ${execution_time} seconds"
+```
+
+---
+
+## Environment Customization
+
+### Environment Variables
+
+**Managing Environment Variables:**
+```bash
+# View all environment variables
+printenv
+env
+
+# Set environment variables
+export DATABASE_URL="postgresql://user:pass@localhost/db"
+export LOG_LEVEL="INFO"
+export NODE_ENV="production"
+
+# Unset variables
+unset OLD_VARIABLE
+
+# Check if variable is set
+if [ -n "${DATABASE_URL:-}" ]; then
+    echo "Database URL is set"
+fi
+
+# Use default values
+DATABASE_HOST=${DATABASE_HOST:-"localhost"}
+DATABASE_PORT=${DATABASE_PORT:-5432}
+```
+
+**Environment Configuration Files:**
+```bash
+# .env file
+#!/bin/bash
+# Environment configuration for MyApp
+
+# Database settings
+export DB_HOST="localhost"
+export DB_PORT="5432"
+export DB_NAME="myapp"
+export DB_USER="myapp_user"
+
+# Application settings
+export APP_ENV="production"
+export LOG_LEVEL="INFO"
+export MAX_CONNECTIONS="100"
+
+# External services
+export REDIS_URL="redis://localhost:6379"
+export ELASTICSEARCH_URL="http://localhost:9200"
+```
+
+**Loading Environment:**
+```bash
+#!/bin/bash
+# Load environment variables
+if [ -f ".env" ]; then
+    source .env
+    echo "Environment loaded from .env"
+fi
+
+# Validate required variables
+required_vars=("DB_HOST" "DB_PORT" "DB_NAME")
+for var in "${required_vars[@]}"; do
+    if [ -z "${!var:-}" ]; then
+        echo "Error: Required environment variable $var is not set"
+        exit 1
+    fi
+done
+```
+
+### Bash Startup Files
+
+**Understanding Bash Startup Files:**
+
+| File | When Executed | Purpose |
+|------|---------------|---------|
+| ~/.bashrc | Interactive non-login shell | Aliases, functions, shell options |
+| ~/.bash_profile | Login shell | Environment variables, PATH |
+| ~/.profile | Login shell (fallback) | POSIX-compliant settings |
+| ~/.bash_logout | Shell exit | Cleanup tasks |
+
+**Sample ~/.bashrc for DevOps:**
+```bash
+# ~/.bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
+
+# User specific environment
+export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export EDITOR="vim"
+
+# DevOps aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias grep='grep --color=auto'
+alias k='kubectl'
+alias d='docker'
+alias dc='docker-compose'
+alias tf='terraform'
+
+# Git aliases
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline'
+
+# System monitoring
+alias ports='netstat -tuln'
+alias procs='ps aux | grep -v grep'
+alias meminfo='free -h'
+alias diskinfo='df -h'
+
+# Functions
+kexec() {
+    kubectl exec -it $1 -- /bin/bash
+}
+
+dexec() {
+    docker exec -it $1 /bin/bash
+}
+
+# Custom prompt with git branch
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+export PS1="\u@\h:\w\[\033[32m\]\$(parse_git_branch)\[\033[00m\]$ "
+
+# History settings
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export HISTCONTROL=ignoredups:erasedups
+shopt -s histappend
+```
+
+### Command History
+
+**History Management:**
+```bash
+# View history
+history
+
+# Search history (Ctrl + R)
+# Repeat last command
+!!
+
+# Repeat command by number
+!123
+
+# Repeat last command starting with 'docker'
+!docker
+
+# Clear history
+history -c
+
+# Delete specific history entry
+history -d 123
+```
+
+---
+
+## File System Operations
+
+### File Operations
+
+**Basic File Operations:**
+```bash
+# Create files
+touch file.txt
+echo "content" > file.txt
+
+# View files
+cat file.txt          # Display entire file
+less file.txt         # Paginated view
+head -n 10 file.txt   # First 10 lines
+tail -n 10 file.txt   # Last 10 lines
+tail -f file.txt      # Follow file changes
+
+# Copy files
+cp source.txt dest.txt
+cp -r source_dir/ dest_dir/
+cp -p file.txt backup.txt  # Preserve attributes
+
+# Move/rename files
+mv old_name.txt new_name.txt
+mv file.txt /path/to/destination/
+
+# Delete files
+rm file.txt
+rm -rf directory/     # Recursive delete (be careful!)
+rm -i file.txt       # Interactive delete
+
+# Find files
+find . -name "*.log"
+find /var/log -type f -size +100M  # Files larger than 100MB
+find . -name "*.txt" -exec grep "pattern" {} \;
+```
+
+**Advanced File Operations:**
+```bash
+# Compare files
+diff file1.txt file2.txt
+diff -u file1.txt file2.txt    # Unified format
+cmp file1.txt file2.txt        # Binary comparison
+
+# File permissions
+chmod 755 script.sh            # rwxr-xr-x
+chmod u+x script.sh           # Add execute for user
+chmod go-w file.txt           # Remove write for group and others
+chown user:group file.txt     # Change ownership
+chgrp group file.txt          # Change group
+
+# File attributes
+stat file.txt                 # Detailed file information
+file file.txt                 # File type
+du -sh directory/             # Directory size
+```
+
+### Links and Special Files
+
+**Creating Links:**
+```bash
+# Soft (symbolic) link
+ln -s /path/to/original /path/to/link
+
+# Hard link
+ln /path/to/original /path/to/hardlink
+
+# Example: Link configuration files
+ln -s /opt/myapp/config/prod.conf /etc/myapp/config.conf
+```
+
+**Working with Special Files:**
+```bash
+# Named pipes (FIFOs)
+mkfifo mypipe
+echo "data" > mypipe &
+cat mypipe
+
+# Device files
+ls -l /dev/null
+ls -l /dev/zero
+ls -l /dev/random
+
+# Temporary files
+temp_file=$(mktemp)
+temp_dir=$(mktemp -d)
+echo "data" > $temp_file
+# Clean up
+rm $temp_file
+rm -rf $temp_dir
+```
+
+### File Compression and Archives
+
+**tar Archives:**
+```bash
+# Create archive
+tar -czf backup.tar.gz /path/to/backup/
+tar -cjf backup.tar.bz2 /path/to/backup/
+
+# Extract archive
+tar -xzf backup.tar.gz
+tar -xjf backup.tar.bz2
+
+# List archive contents
+tar -tzf backup.tar.gz
+tar -tjf backup.tar.bz2
+
+# Extract specific files
+tar -xzf backup.tar.gz specific/file.txt
+```
+
+**Compression Tools:**
+```bash
+# gzip
+gzip file.txt          # Creates file.txt.gz
+gunzip file.txt.gz     # Extracts to file.txt
+
+# zip
+zip archive.zip file1.txt file2.txt
+unzip archive.zip
+
+# Advanced backup script
+#!/bin/bash
+BACKUP_DIR="/backup"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="$BACKUP_DIR/backup_$DATE.tar.gz"
+
+tar -czf $BACKUP_FILE \
+    --exclude='*.log' \
+    --exclude='tmp/*' \
+    /opt/myapp/
+
+echo "Backup created: $BACKUP_FILE"
+```
+
+---
+
+## Process Management
+
+### Listing and Monitoring Processes
+
+**Process Information:**
+```bash
+# List all processes
+ps aux
+ps -ef
+
+# Process tree
+pstree
+
+# Real-time monitoring
+top
+htop    # Enhanced version
+
+# Find processes by name
+pgrep nginx
+pgrep -f "python.*myapp"
+
+# Process information
+ps -p 1234    # Specific process ID
+ps -C nginx   # Processes by command name
+```
+
+**Advanced Process Monitoring:**
+```bash
+#!/bin/bash
+# Process monitoring script
+
+monitor_process() {
+    local process_name=$1
+    local max_memory=${2:-500}  # MB
+    local max_cpu=${3:-80}      # Percentage
+    
+    while true; do
+        # Get process stats
+        pid=$(pgrep -f $process_name | head -1)
+        
+        if [ -z "$pid" ]; then
+            echo "Process $process_name not found"
+            sleep 60
+            continue
+        fi
+        
+        # Get memory usage (in KB)
+        memory_kb=$(ps -p $pid -o rss= 2>/dev/null)
+        memory_mb=$((memory_kb / 1024))
+        
+        # Get CPU usage
+        cpu_percent=$(ps -p $pid -o %cpu= 2>/dev/null)
+        
+        echo "Process: $process_name (PID: $pid)"
+        echo "Memory: ${memory_mb}MB, CPU: ${cpu_percent}%"
+        
+        # Check thresholds
+        if [ $memory_mb -gt $max_memory ]; then
+            echo "WARNING: Memory usage exceeds ${max_memory}MB"
+        fi
+        
+        if (( $(echo "$cpu_percent > $max_cpu" | bc -l) )); then
+            echo "WARNING: CPU usage exceeds ${max_cpu}%"
+        fi
+        
+        sleep 30
+    done
+}
+
+# Usage
+monitor_process "nginx" 200 50
+```
+
+### Background and Foreground Processes
+
+**Job Control:**
+```bash
+# Run in background
+command &
+
+# List jobs
+jobs
+
+# Bring to foreground
+fg %1
+
+# Send to background
+bg %1
+
+# Nohup (no hang up)
+nohup long_running_command &
+
+# Disown job
+disown %1
+```
+
+**Screen and tmux:**
+```bash
+# Screen
+screen -S mysession
+screen -r mysession    # Reattach
+screen -ls            # List sessions
+
+# tmux
+tmux new-session -d -s mysession
+tmux attach-session -t mysession
+tmux list-sessions
+```
+
+### Process Scheduling and Priorities
+
+**Process Priorities:**
+```bash
+# Run with priority (nice values: -20 to 19)
+nice -n 10 command          # Lower priority
+nice -n -10 command         # Higher priority (requires root)
+
+# Change priority of running process
+renice 5 -p 1234           # Change process priority
+renice 5 -u username       # Change user's processes priority
+```
+
+### Signals and Process Control
+
+**Sending Signals:**
+```bash
+# Common signals
+kill -TERM 1234    # Terminate gracefully
+kill -KILL 1234    # Force kill
+kill -HUP 1234     # Hang up (reload config)
+kill -USR1 1234    # User-defined signal 1
+kill -USR2 1234    # User-defined signal 2

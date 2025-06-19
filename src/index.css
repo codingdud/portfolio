@@ -1,0 +1,288 @@
+@import "tailwindcss";
+
+/* Base prose styles */
+.prose {
+  @apply text-gray-300 leading-relaxed;
+  max-width: none;
+}
+
+/* Headings with better hierarchy */
+.prose h1 {
+  @apply text-white font-bold text-3xl mt-8 mb-6 pb-3 border-b border-gray-700;
+}
+
+.prose h2 {
+  @apply text-white font-bold text-2xl mt-8 mb-4 pb-2 border-b border-gray-800;
+}
+
+.prose h3 {
+  @apply text-white font-semibold text-xl mt-6 mb-3;
+}
+
+.prose h4 {
+  @apply text-gray-100 font-semibold text-lg mt-4 mb-2;
+}
+
+.prose h5, .prose h6 {
+  @apply text-gray-200 font-medium mt-3 mb-2;
+}
+
+/* Paragraphs and text */
+.prose p {
+  @apply my-4 leading-7;
+}
+
+.prose strong {
+  @apply text-white font-semibold;
+}
+
+.prose em {
+  @apply text-gray-200 italic;
+}
+
+/* Links */
+.prose a {
+  @apply text-blue-400 hover:text-blue-300 underline decoration-blue-500/30 hover:decoration-blue-400/50 transition-all duration-200;
+}
+
+.prose a:hover {
+  @apply bg-blue-500/10 px-1 rounded;
+}
+
+/* Inline code - improved readability */
+.prose code:not(pre code) {
+  @apply bg-gray-800 text-green-300 px-2 py-1 rounded text-sm font-mono border border-gray-700;
+  font-size: 0.9em;
+}
+
+/* Code blocks - enhanced styling */
+.prose pre {
+  @apply bg-gray-900 border border-gray-700 rounded-lg overflow-x-auto my-6 shadow-xl;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+}
+
+.prose pre code {
+  @apply text-gray-200 text-sm leading-6 font-mono block p-4;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-size: 0.875rem;
+}
+
+/* Language label for code blocks */
+.prose pre[data-language]::before {
+  content: attr(data-language);
+  @apply absolute top-2 right-3 text-xs text-gray-400 uppercase font-semibold;
+  position: relative;
+  float: right;
+  margin-bottom: -1.5rem;
+  z-index: 10;
+}
+
+/* Syntax highlighting improvements */
+.prose pre .token.comment {
+  @apply text-gray-500 italic;
+}
+
+.prose pre .token.string {
+  @apply text-green-400;
+}
+
+.prose pre .token.number {
+  @apply text-blue-400;
+}
+
+.prose pre .token.keyword {
+  @apply text-purple-400 font-semibold;
+}
+
+.prose pre .token.function {
+  @apply text-yellow-400;
+}
+
+.prose pre .token.operator {
+  @apply text-pink-400;
+}
+
+/* Lists */
+.prose ul, .prose ol {
+  @apply my-4 pl-6 space-y-2;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose li {
+  @apply leading-6;
+}
+
+.prose li > p {
+  @apply my-2;
+}
+
+/* Nested lists */
+.prose ul ul, .prose ol ol {
+  @apply mt-2 mb-2;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  @apply border-l-4 border-blue-600 pl-6 py-2 my-6 bg-blue-950/20 rounded-r-lg;
+}
+
+.prose blockquote p {
+  @apply text-gray-200 italic text-lg my-2;
+}
+
+.prose blockquote cite {
+  @apply text-gray-400 text-sm not-italic;
+}
+
+/* Tables - enhanced for better readability */
+.prose table {
+  @apply w-full border-collapse my-6 text-sm;
+  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+.prose thead {
+  @apply bg-gray-800;
+}
+
+.prose th {
+  @apply px-4 py-3 text-left font-semibold text-white border-b border-gray-600;
+}
+
+.prose td {
+  @apply px-4 py-3 border-b border-gray-700 text-gray-300;
+}
+
+.prose tr:last-child td {
+  @apply border-b-0;
+}
+
+.prose tbody tr:nth-child(even) {
+  @apply bg-gray-800/30;
+}
+
+.prose tbody tr:hover {
+  @apply bg-gray-700/50 transition-colors duration-150;
+}
+
+/* Table code cells */
+.prose table code {
+  @apply bg-gray-700 text-green-300 px-2 py-1 text-xs;
+}
+
+/* Horizontal rules */
+.prose hr {
+  @apply border-gray-700 my-8;
+}
+
+/* Images */
+.prose img {
+  @apply rounded-lg shadow-lg my-6;
+}
+
+/* Keyboard shortcuts */
+.prose kbd {
+  @apply bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs font-mono text-gray-200;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Callout boxes */
+.prose .callout {
+  @apply p-4 my-6 rounded-lg border-l-4;
+}
+
+.prose .callout.info {
+  @apply bg-blue-950/30 border-blue-500 text-blue-100;
+}
+
+.prose .callout.warning {
+  @apply bg-yellow-950/30 border-yellow-500 text-yellow-100;
+}
+
+.prose .callout.error {
+  @apply bg-red-950/30 border-red-500 text-red-100;
+}
+
+.prose .callout.success {
+  @apply bg-green-950/30 border-green-500 text-green-100;
+}
+
+/* Code copy button container */
+.prose .code-block-wrapper {
+  @apply relative;
+}
+
+.prose .copy-button {
+  @apply absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-2 py-1 rounded text-xs transition-all duration-200 opacity-0 group-hover:opacity-100;
+}
+
+.prose pre:hover .copy-button {
+  @apply opacity-100;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .prose {
+    @apply text-sm;
+  }
+  
+  .prose h1 {
+    @apply text-2xl;
+  }
+  
+  .prose h2 {
+    @apply text-xl;
+  }
+  
+  .prose pre {
+    @apply text-xs;
+  }
+  
+  .prose table {
+    @apply text-xs;
+  }
+  
+  .prose th, .prose td {
+    @apply px-2 py-2;
+  }
+}
+
+/* Focus styles for accessibility */
+.prose a:focus,
+.prose button:focus {
+  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-gray-900;
+}
+
+/* Print styles */
+@media print {
+  .prose {
+    @apply text-black;
+  }
+  
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply text-black;
+  }
+  
+  .prose code {
+    @apply bg-gray-100 text-black border border-gray-300;
+  }
+  
+  .prose pre {
+    @apply bg-gray-100 border border-gray-300;
+  }
+  
+  .prose pre code {
+    @apply text-black;
+  }
+}
