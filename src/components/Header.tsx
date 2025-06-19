@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import gsap from 'gsap';
 import { FiGithub } from 'react-icons/fi';
-
+import ScrollProgressBar  from './ScrollProgressBar'
 function Header() {
   useEffect(() => {
     gsap.fromTo(
@@ -18,6 +18,8 @@ function Header() {
   }, []);
 
   return (
+    <>
+    <ScrollProgressBar/>
     <header className="header-nav bg-gray-800 py-4 sticky top-0 z-50">
       <nav className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">Portfolio</Link>
@@ -36,6 +38,7 @@ function Header() {
         </div>
       </nav>
     </header>
+    </>
   );
 }
 

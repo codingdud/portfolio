@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -14,49 +13,15 @@ import CertificationsSection from '../components/Home/CertificationsSection';
 import SoftSkillsSection from '../components/Home/SoftSkillsSection';
 
 function Home() {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const progressBarRef = useRef<HTMLDivElement|null>(null);
-
-  useEffect(() => {
-    setIsLoaded(true);
-
-    // GSAP ScrollTrigger for scroll progress
-    const trigger = ScrollTrigger.create({
-      start: 0,
-      end: () => document.documentElement.scrollHeight - window.innerHeight,
-      onUpdate: (self) => {
-        if (progressBarRef.current) {
-          progressBarRef.current.style.width = `${self.progress * 100}%`;
-        }
-      },
-    });
-
-    return () => {
-      trigger.kill();
-    };
-  }, []);
-
   return (
-    <div className='relative'>
-      {/* Fixed Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 bg-gray-800 z-50">
-        <div
-          ref={progressBarRef}
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-150 ease-out"
-          style={{ width: '0%' }}
-        />
-      </div>
-
+    <>
       {/* Parallax Background */}
       <div className="parallax-bg fixed inset-0 opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-purple-900 to-gray-900" />
       </div>
-
       {/* Main Content with fade-in effect */}
       <div
-        className={`relative z-10 space-y-20 transition-opacity duration-1000 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`relative z-10 space-y-20 transition-opacity duration-1000 opacity-100`}
       >
         <div className="hero-float">
           <HeroSection />
@@ -93,7 +58,7 @@ function Home() {
           </svg>
         </button>
       </div>
-    </div>
+    </>
   );
 }
 

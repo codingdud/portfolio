@@ -38,7 +38,6 @@ const ExperienceSection = () => {
       color: "blue",
       achievements: [
         "Implemented and optimized AOSP's img2simg tool using Rust, improving system image conversion efficiency by 30-25%",
-        "Contributed to Android system-level development with focus on optimizing filesystem operations",
         "Implemented automated testing frameworks, reducing manual testing efforts by 40%"
       ]
     },
