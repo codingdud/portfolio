@@ -27,7 +27,7 @@ function Header() {
           <Link to="/blog" className="hover:text-blue-400">Blog</Link>
           <Link to="/docs" className="hover:text-blue-400">Docs</Link>
           <a
-            href="https://github.com/your-username/your-repo"
+            href="https://github.com/codingdud"
             target="_blank"
             rel="noopener noreferrer"
             className="github-link inline hover:text-purple-400 flex items-center"

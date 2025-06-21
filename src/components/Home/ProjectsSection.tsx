@@ -3,6 +3,19 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 
+import accommodation from '../../assets/project_image/accommodation.png';
+import webgen from '../../assets/project_image/webgen.png';
+import algo from '../../assets/project_image/algo.png';
+import coolicons from '../../assets/project_image/coolicons.png';
+import etl from '../../assets/project_image/etl.png';
+import formeassy from '../../assets/project_image/formeassy.png';
+import photoflow from '../../assets/project_image/photoflow.png';
+import photoseekai from '../../assets/project_image/photoseekai.png';
+
+
+
+
+
 gsap.registerPlugin(ScrollTrigger);
 
 type Project = {
@@ -13,6 +26,7 @@ type Project = {
   color: 'yellow'|'green'|'blue'|'purple'|'orange'|'red'|'pink'|'teal'|'cyan';
   github?: string;
   live?:string;
+  image?: string;
 };
 
 const projects: Project[] = [
@@ -23,7 +37,8 @@ const projects: Project[] = [
     tags: ["React", "Redux", "Node", "Typescript"],
     color: "yellow",
     github: "https://github.com/codingdud/webgen",
-    live: "https://webgen-seven.vercel.app"
+    live: "https://webgen-seven.vercel.app",
+    image: webgen
   },
   {
     title: "Student Accommodation Finder",
@@ -32,7 +47,8 @@ const projects: Project[] = [
     tags: ["React.js", "Node.js", "Redux", "Geospatial"],
     color: "green",
     github: "https://github.com/codingdud/minor-project",
-    live: "https://stayhub.animeshk.me/"
+    live: "https://stayhub.animeshk.me/",
+    image: accommodation
   },
   {
     title: "Form Easy",
@@ -41,7 +57,8 @@ const projects: Project[] = [
     tags: ["React.js", "MongoDB", "Docker", "RESTful API"],
     color: "blue",
     github: "https://github.com/codingdud/Formease",
-    live: "https://simpform.vercel.app"
+    live: "https://simpform.vercel.app",
+    image: formeassy
   },
   {
     title: "A Streamlit-based ETL application",
@@ -50,7 +67,8 @@ const projects: Project[] = [
     tags: ["Streamlit", "Pandas", "Excel"],
     color: "purple",
     github: "https://github.com/codingdud/etl-streamlit/tree/main/etl-app",
-    live: "https://github.com/codingdud/etl-streamlit"
+    live: "https://github.com/codingdud/etl-streamlit",
+    image: etl
   },
   {
     title: "AlgoDocHub",
@@ -59,7 +77,8 @@ const projects: Project[] = [
     tags: ["C++", "algorithem","DSA"],
     color: "cyan",
     github: "https://github.com/codingdud/AlgoDocHub",
-    live: "https://github.com/codingdud/AlgoDocHub/wiki"
+    live: "https://github.com/codingdud/AlgoDocHub/wiki",
+    image: algo
   },
   {
     title: "coolicons",
@@ -68,7 +87,8 @@ const projects: Project[] = [
     tags: ["Storybook", "svg"],
     color: "teal",
     github: "https://github.com/codingdud/coolicons/tree/main",
-    live: "https://github.com/codingdud/coolicons/pkgs/npm/coolicons"
+    live: "https://github.com/codingdud/coolicons/pkgs/npm/coolicons",
+    image: coolicons
   },
   {
     title: "PhotoSeekAI",
@@ -77,7 +97,8 @@ const projects: Project[] = [
     tags: ["flask", "cloudnary","PostgreSQL"],
     color: "red",
     github: "https://github.com/codingdud/majorproject",
-    live: "https://my-flask-app-latest-fbf3.onrender.com/api"
+    live: "https://my-flask-app-latest-fbf3.onrender.com/api",
+    image: photoseekai
   },
   {
     title: "PhotoFlow",
@@ -86,7 +107,8 @@ const projects: Project[] = [
     tags: ["Reactnative", "Reanimation"],
     color: "orange",
     github: "https://github.com/codingdud/PhotoFlow",
-    live: "https://github.com/codingdud/PhotoFlow/releases/tag/beta"
+    live: "https://github.com/codingdud/PhotoFlow/releases/tag/beta",
+    image: photoflow
   }
 ];
 
@@ -140,6 +162,13 @@ const ProjectsSection: React.FC = () => {
             key={index}
             className="project-card bg-gray-800 p-6 rounded-lg hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 cursor-pointer"
           >
+            {project.image && (
+              <img 
+                src={project.image}
+                alt={`${project.title} preview`}
+                className="w-full h-48 object-cover rounded mb-4"
+              />
+            )}
             <h3 className={`text-xl font-bold mb-2 ${getColorClasses(project.color)}`}>
               {project.title}
             </h3>
