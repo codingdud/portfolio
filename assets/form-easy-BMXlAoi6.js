@@ -1,4 +1,4 @@
-import{j as n}from"./index-B60JIUa-.js";const o={title:"Building Easy Forms in React",date:"2025-02-01",tags:["react","forms"]};function t(e){const r={code:"code",h1:"h1",h2:"h2",p:"p",pre:"pre",...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h1,{children:"Building Easy Forms in React"}),`
+import{j as n}from"./index-CMgMfdng.js";const o={title:"Building Easy Forms in React",date:"2025-02-01",tags:["react","forms"]};function t(e){const r={code:"code",h1:"h1",h2:"h2",p:"p",pre:"pre",...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h1,{children:"Building Easy Forms in React"}),`
 `,n.jsx(r.p,{children:"Create user-friendly forms with React and Formik."}),`
 `,n.jsx(r.h2,{children:"Setup Formik"}),`
 `,n.jsx(r.pre,{children:n.jsx(r.code,{className:"language-jsx",children:`import { Formik, Form, Field } from 'formik';\r
