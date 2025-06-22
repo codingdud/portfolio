@@ -1,54 +1,59 @@
-# React + TypeScript + Vite
+# Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to my portfolio! 🚀
 
-Currently, two official plugins are available:
+This repository showcases my personal portfolio site, built using **React** with **MDX** support for rich, interactive content. It also features a built-in **Chat Bot** to help users explore my projects and learn more about me.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Frontend:** [React](https://react.dev/)
+- **Markdown + JSX:** [MDX](https://mdxjs.com/)
+- **Chat Bot:** Integrated for interactive project guidance and Q&A
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## ✨ Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Dynamic Project Pages:** Each project is described using MDX, allowing for code snippets, embeds, and interactivity.
+- **About Me:** Learn about my journey, skills, and interests.
+- **Chat Bot:** Ask questions about my projects, tech stack, or background and get instant answers.
+- **Responsive Design:** Optimized for all devices.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🚀 Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/codingdud/portfolio.git
+   cd portfolio
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   npm start
+   ```
+
+4. **Explore:**  
+   Open [http://localhost:3000](http://localhost:3000) to view the site. Use the Chat Bot to ask questions or get guidance!
+
+---
+
+
+## 🤖 Chat Bot
+
+The site features an integrated Chat Bot that can:
+
+- Answer questions about my projects
+- Guide users to specific portfolio sections
+- Share details about my skills and background
+
+Feel free to ask it anything about my portfolio!
+
