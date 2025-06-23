@@ -11,7 +11,6 @@ import ProjectsSection from '../components/Home/ProjectsSection';
 import SkillsSection from '../components/Home/SkillsSection';
 import CertificationsSection from '../components/Home/CertificationsSection';
 import SoftSkillsSection from '../components/Home/SoftSkillsSection';
-
 function Home() {
   return (
     <>
@@ -21,7 +20,7 @@ function Home() {
       </div>
       {/* Main Content with fade-in effect */}
       <div
-        className={`relative z-10 space-y-20 transition-opacity duration-1000 opacity-100`}
+        className={`relative z-10 space-y-10 transition-opacity duration-1000 opacity-100`}
       >
         <div className="hero-float">
           <HeroSection />
@@ -46,11 +45,10 @@ function Home() {
         <div className="section-container">
           <SoftSkillsSection />
         </div>
-
         {/* Scroll to Top Button */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50"
+          className="sticky bottom-8 left-full bg-gradient-to-r from-blue-600 to-purple-600 text-white p-2 rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 z-50"
           aria-label="Scroll to top"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
