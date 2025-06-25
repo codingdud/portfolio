@@ -1,9 +1,10 @@
-import{j as n}from"./index-DD9ztbhs.js";const o={title:"Docker CLI Complete Guide",description:"The guide follows modern Docker practices with real-world examples and security-first approaches, making it suitable for both development and production environments."};function i(r){const e={a:"a",code:"code",h2:"h2",h3:"h3",li:"li",pre:"pre",ul:"ul",...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Table of Contents"}),`
+import{j as n}from"./index-DiReY_Ck.js";const s={title:"Docker CLI Complete Guide",description:"The guide follows modern Docker practices with real-world examples and security-first approaches, making it suitable for both development and production environments."};function i(r){const e={a:"a",code:"code",h2:"h2",h3:"h3",h4:"h4",li:"li",p:"p",pre:"pre",ul:"ul",...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Table of Contents"}),`
 `,n.jsxs(e.ul,{children:[`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#environment-setup",children:"Environment Setup"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#container-management",children:"Container Management"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#image-operations",children:"Image Operations"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#volume-management",children:"Volume Management"})}),`
+`,n.jsx(e.li,{children:n.jsx(e.a,{href:"#environment-variables",children:"Environment Variables"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#dockerfile-best-practices",children:"Dockerfile Best Practices"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#network-configuration",children:"Network Configuration"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#security-best-practices",children:"Security Best Practices"})}),`
@@ -118,7 +119,329 @@ docker container run -d --name my-container -v $(pwd):/usr/share/nginx/html ngin
 docker container run -d -p 80:4000 --name my-container \\\r
   -v $(pwd):/site bretfisher/jekyll-serve
 `})}),`
-`,n.jsx(e.h2,{children:"Dockerfile Best Practices"}),`
+`,n.jsx(e.h2,{children:"Environment Variables"}),`
+`,n.jsx(e.p,{children:"Environment variables are crucial for configuring containerized applications. They provide a clean way to pass configuration without rebuilding images."}),`
+`,n.jsx(e.h3,{children:"Setting Environment Variables at Runtime"}),`
+`,n.jsx(e.h4,{children:"Single Environment Variable"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# Set single environment variable\r
+docker run -e NODE_ENV=production nginx\r
+\r
+# Set with value assignment\r
+docker run -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" myapp\r
+\r
+# Set environment variable from host environment\r
+docker run -e HOST_IP myapp  # Uses $HOST_IP from host
+`})}),`
+`,n.jsx(e.h4,{children:"Multiple Environment Variables"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# Multiple -e flags\r
+docker run \\\r
+  -e NODE_ENV=production \\\r
+  -e PORT=3000 \\\r
+  -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" \\\r
+  -e REDIS_URL="redis://localhost:6379" \\\r
+  myapp\r
+\r
+# Using environment file\r
+docker run --env-file .env myapp\r
+\r
+# Combine both methods\r
+docker run --env-file .env -e OVERRIDE_VAR=value myapp
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Files (.env)"}),`
+`,n.jsx(e.h4,{children:"Creating Environment Files"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# .env file example\r
+NODE_ENV=production\r
+PORT=3000\r
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb\r
+REDIS_URL=redis://localhost:6379\r
+API_KEY=your-secret-api-key\r
+DEBUG=false\r
+\r
+# .env.development\r
+NODE_ENV=development\r
+PORT=3000\r
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb_dev\r
+DEBUG=true
+`})}),`
+`,n.jsx(e.h4,{children:"Using Environment Files"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# Load from default .env file\r
+docker run --env-file .env myapp\r
+\r
+# Load from specific file\r
+docker run --env-file .env.production myapp\r
+\r
+# Load multiple env files (last one takes precedence)\r
+docker run --env-file .env --env-file .env.local myapp
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Variables in Dockerfile"}),`
+`,n.jsx(e.h4,{children:"Setting Default Values"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`# Set environment variables with default values\r
+ENV NODE_ENV=development\r
+ENV PORT=3000\r
+ENV LOG_LEVEL=info\r
+\r
+# Multiple variables in one line\r
+ENV NODE_ENV=development \\\r
+    PORT=3000 \\\r
+    LOG_LEVEL=info\r
+\r
+# Using ARG for build-time variables\r
+ARG BUILD_VERSION=latest\r
+ENV APP_VERSION=$BUILD_VERSION
+`})}),`
+`,n.jsx(e.h4,{children:"Advanced Environment Configuration"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`FROM node:18-alpine\r
+\r
+# Build arguments (available during build)\r
+ARG NODE_ENV=production\r
+ARG BUILD_DATE\r
+ARG GIT_COMMIT\r
+\r
+# Environment variables (available at runtime)\r
+ENV NODE_ENV=$NODE_ENV\r
+ENV BUILD_DATE=$BUILD_DATE\r
+ENV GIT_COMMIT=$GIT_COMMIT\r
+ENV APP_DIR=/usr/src/app\r
+ENV PATH=$APP_DIR/node_modules/.bin:$PATH\r
+\r
+WORKDIR $APP_DIR\r
+\r
+# Use environment variables in commands\r
+RUN if [ "$NODE_ENV" = "development" ]; then \\\r
+      npm install; \\\r
+    else \\\r
+      npm ci --only=production; \\\r
+    fi\r
+\r
+EXPOSE $PORT\r
+CMD ["node", "server.js"]
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Variable Best Practices"}),`
+`,n.jsx(e.h4,{children:"Secure Environment Variables"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# ❌ Bad: Exposing secrets in command line\r
+docker run -e DB_PASSWORD=mysecret myapp\r
+\r
+# ✅ Good: Using environment file\r
+echo "DB_PASSWORD=mysecret" > .env.local\r
+chmod 600 .env.local\r
+docker run --env-file .env.local myapp\r
+\r
+# ✅ Good: Using Docker secrets (in swarm mode)\r
+echo "mysecret" | docker secret create db_password -\r
+docker service create --secret db_password myapp\r
+\r
+# ✅ Good: Reading from host environment\r
+export DB_PASSWORD="mysecret"\r
+docker run -e DB_PASSWORD myapp
+`})}),`
+`,n.jsx(e.h4,{children:"Environment Variable Validation"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`FROM alpine:3.18\r
+\r
+# Set required environment variables\r
+ENV REQUIRED_VAR=""\r
+ENV OPTIONAL_VAR="default_value"\r
+\r
+# Validate required environment variables\r
+RUN if [ -z "$REQUIRED_VAR" ]; then \\\r
+      echo "ERROR: REQUIRED_VAR must be set" && exit 1; \\\r
+    fi\r
+\r
+# Create validation script\r
+COPY validate-env.sh /usr/local/bin/\r
+RUN chmod +x /usr/local/bin/validate-env.sh\r
+\r
+# Validate environment on startup\r
+ENTRYPOINT ["/usr/local/bin/validate-env.sh"]\r
+CMD ["your-app"]
+`})}),`
+`,n.jsx(e.h4,{children:"Validation Script Example"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`#!/bin/sh\r
+# validate-env.sh\r
+\r
+# Required environment variables\r
+REQUIRED_VARS="DATABASE_URL REDIS_URL API_KEY"\r
+\r
+for var in $REQUIRED_VARS; do\r
+    eval value=\\$var\r
+    if [ -z "$value" ]; then\r
+        echo "ERROR: Required environment variable $var is not set"\r
+        exit 1\r
+    fi\r
+done\r
+\r
+echo "Environment validation passed"\r
+exec "$@"
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Variables in Docker Compose"}),`
+`,n.jsx(e.h4,{children:"Basic Configuration"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-yaml",children:`# docker-compose.yml\r
+version: '3.8'\r
+\r
+services:\r
+  web:\r
+    build: .\r
+    environment:\r
+      - NODE_ENV=production\r
+      - PORT=3000\r
+      - DATABASE_URL=postgresql://postgres:password@db:5432/myapp\r
+    # Or using object syntax\r
+    environment:\r
+      NODE_ENV: production\r
+      PORT: 3000\r
+      DATABASE_URL: postgresql://postgres:password@db:5432/myapp\r
+\r
+  db:\r
+    image: postgres:15\r
+    environment:\r
+      POSTGRES_DB: myapp\r
+      POSTGRES_USER: postgres\r
+      POSTGRES_PASSWORD: password
+`})}),`
+`,n.jsx(e.h4,{children:"Using Environment Files with Compose"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-yaml",children:`# docker-compose.yml\r
+version: '3.8'\r
+\r
+services:\r
+  web:\r
+    build: .\r
+    env_file:\r
+      - .env\r
+      - .env.local\r
+    environment:\r
+      - NODE_ENV=\${NODE_ENV:-development}\r
+      - DATABASE_URL=postgresql://postgres:\${DB_PASSWORD}@db:5432/\${DB_NAME}\r
+\r
+  db:\r
+    image: postgres:15\r
+    env_file: .env.db
+`})}),`
+`,n.jsx(e.h3,{children:"Dynamic Environment Variables"}),`
+`,n.jsx(e.h4,{children:"Runtime Environment Detection"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`FROM node:18-alpine\r
+\r
+WORKDIR /app\r
+COPY package*.json ./\r
+RUN npm ci\r
+\r
+COPY . .\r
+\r
+# Create dynamic environment script\r
+RUN cat > /usr/local/bin/setup-env.sh << 'EOF'\r
+#!/bin/sh\r
+\r
+# Detect environment based on hostname or other factors\r
+if [ "$HOSTNAME" = "production-server" ]; then\r
+    export NODE_ENV=production\r
+    export LOG_LEVEL=warn\r
+elif [ "$HOSTNAME" = "staging-server" ]; then\r
+    export NODE_ENV=staging\r
+    export LOG_LEVEL=info\r
+else\r
+    export NODE_ENV=development\r
+    export LOG_LEVEL=debug\r
+fi\r
+\r
+# Set computed values\r
+export BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")\r
+export CONTAINER_ID=$(hostname)\r
+\r
+exec "$@"\r
+EOF\r
+\r
+RUN chmod +x /usr/local/bin/setup-env.sh\r
+\r
+ENTRYPOINT ["/usr/local/bin/setup-env.sh"]\r
+CMD ["npm", "start"]
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Variable Templates"}),`
+`,n.jsx(e.h4,{children:"Configuration Template System"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# config-template.json\r
+{\r
+  "database": {\r
+    "host": "\${DB_HOST}",\r
+    "port": "\${DB_PORT}",\r
+    "name": "\${DB_NAME}",\r
+    "user": "\${DB_USER}",\r
+    "password": "\${DB_PASSWORD}"\r
+  },\r
+  "redis": {\r
+    "url": "\${REDIS_URL}"\r
+  },\r
+  "logging": {\r
+    "level": "\${LOG_LEVEL:-info}"\r
+  }\r
+}
+`})}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`FROM alpine:3.18\r
+\r
+# Install envsubst for template processing\r
+RUN apk add --no-cache gettext\r
+\r
+COPY config-template.json /app/\r
+COPY entrypoint.sh /usr/local/bin/\r
+\r
+RUN chmod +x /usr/local/bin/entrypoint.sh\r
+\r
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+`})}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`#!/bin/sh\r
+# entrypoint.sh\r
+\r
+# Generate config from template\r
+envsubst < /app/config-template.json > /app/config.json\r
+\r
+# Validate generated config\r
+if ! cat /app/config.json | jq empty; then\r
+    echo "ERROR: Generated config is not valid JSON"\r
+    exit 1\r
+fi\r
+\r
+exec "$@"
+`})}),`
+`,n.jsx(e.h3,{children:"Environment Variable Debugging"}),`
+`,n.jsx(e.h4,{children:"Inspection Commands"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# View environment variables in running container\r
+docker exec container_name env\r
+\r
+# View specific environment variable\r
+docker exec container_name printenv NODE_ENV\r
+\r
+# Debug environment issues\r
+docker run --rm -it myapp env\r
+docker run --rm -it myapp sh -c 'echo "NODE_ENV=$NODE_ENV"'\r
+\r
+# Compare environments\r
+docker run --env-file .env.dev myapp env > dev-env.txt\r
+docker run --env-file .env.prod myapp env > prod-env.txt\r
+diff dev-env.txt prod-env.txt
+`})}),`
+`,n.jsx(e.h3,{children:"Common Environment Patterns"}),`
+`,n.jsx(e.h4,{children:"Application Configuration"}),`
+`,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-bash",children:`# Web application\r
+docker run \\\r
+  -e NODE_ENV=production \\\r
+  -e PORT=3000 \\\r
+  -e SESSION_SECRET=your-session-secret \\\r
+  -e DATABASE_URL=postgresql://user:pass@db:5432/app \\\r
+  -e REDIS_URL=redis://redis:6379 \\\r
+  web-app\r
+\r
+# Database\r
+docker run \\\r
+  -e POSTGRES_DB=myapp \\\r
+  -e POSTGRES_USER=appuser \\\r
+  -e POSTGRES_PASSWORD=secure-password \\\r
+  -e POSTGRES_INITDB_ARGS="--encoding=UTF-8 --lc-collate=C --lc-ctype=C" \\\r
+  postgres:15\r
+\r
+# Cache\r
+docker run \\\r
+  -e REDIS_PASSWORD=cache-password \\\r
+  -e REDIS_MAXMEMORY=256mb \\\r
+  -e REDIS_MAXMEMORY_POLICY=allkeys-lru \\\r
+  redis:7-alpine
+`})}),`
+`,n.jsx(e.p,{children:"This comprehensive environment variable section covers all aspects from basic usage to advanced patterns, security considerations, and debugging techniques."}),`
 `,n.jsx(e.h3,{children:"Security-First Dockerfile"}),`
 `,n.jsx(e.pre,{children:n.jsx(e.code,{className:"language-dockerfile",children:`# Use minimal base image\r
 FROM gcr.io/distroless/static-debian10\r
@@ -336,4 +659,4 @@ docker stats container_name\r
 \r
 # Inspect container configuration\r
 docker inspect container_name
-`})})]})}function s(r={}){const{wrapper:e}=r.components||{};return e?n.jsx(e,{...r,children:n.jsx(i,{...r})}):i(r)}export{s as default,o as frontmatter};
+`})})]})}function o(r={}){const{wrapper:e}=r.components||{};return e?n.jsx(e,{...r,children:n.jsx(i,{...r})}):i(r)}export{o as default,s as frontmatter};
