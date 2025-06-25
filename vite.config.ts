@@ -10,4 +10,9 @@ export default defineConfig({
   plugins: [tailwindcss(),react(),mdx({
       remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
     })],
+  // Add this 'build' object
+  build: {
+    // Increase the limit to, for example, 1000KB (1MB)
+    chunkSizeWarningLimit: 1000, 
+  },
 })

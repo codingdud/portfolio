@@ -11,6 +11,7 @@ import etl from '../../assets/project_image/etl.png';
 import formeassy from '../../assets/project_image/formeassy.png';
 import photoflow from '../../assets/project_image/photoflow.png';
 import photoseekai from '../../assets/project_image/photoseekai.png';
+import feedback from '../../assets/project_image/feedback.png';
 
 
 
@@ -109,6 +110,16 @@ const projects: Project[] = [
     github: "https://github.com/codingdud/PhotoFlow",
     live: "https://github.com/codingdud/PhotoFlow/releases/tag/beta",
     image: photoflow
+  },
+  {
+    title: "Feedback System",
+    date: "June 2025",
+    description: "A lightweight feedback system for managers and employees",
+    tags: ["Next.js", "FastAPI","SQLite"],
+    color: "teal",
+    github: "https://feedback-system-peach-two.vercel.app/",
+    live: "https://github.com/codingdud/feedback-system",
+    image: feedback
   }
 ];
 

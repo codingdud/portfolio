@@ -1,0 +1,754 @@
+---
+title: Docker CLI Complete Guide
+description: The guide follows modern Docker practices with real-world examples and security-first approaches, making it suitable for both development and production environments.
+---
+
+## Table of Contents
+- [Environment Setup](#environment-setup)
+- [Container Management](#container-management)
+- [Image Operations](#image-operations)
+- [Volume Management](#volume-management)
+- [Environment Variables](#environment-variables)
+- [Dockerfile Best Practices](#dockerfile-best-practices)
+- [Network Configuration](#network-configuration)
+- [Security Best Practices](#security-best-practices)
+- [Advanced Operations](#advanced-operations)
+
+## Environment Setup
+
+### Docker Host Configuration
+```bash
+# Set remote Docker host
+export DOCKER_HOST=ssh://root@142.244.156.151
+
+# Reset to local Docker
+unset DOCKER_HOST
+
+# Verify Docker installation
+docker version
+docker info
+```
+
+## Container Management
+
+### Running Containers
+```bash
+# Basic container run
+docker container run -p 80:80 nginx
+
+# Run in detached mode
+docker container run -d -p 80:80 nginx
+
+# Run with custom name
+docker container run -d -p 80:80 --name webserver nginx
+
+# Interactive mode with auto-removal
+docker container run --rm -it centos:7 bash
+
+# Run with custom port mapping
+docker container run -it -d -p 80:80 --name httpd httpd bash
+```
+
+### Container Lifecycle
+```bash
+# Stop container (by ID or name)
+docker container stop 69
+docker container stop webserver
+
+# Start stopped container
+docker container start mongo
+
+# List all containers
+docker container ls -a
+
+# Remove containers
+docker container rm 654
+docker container rm -f 667  # Force remove running container
+```
+
+### Container Monitoring
+```bash
+# View container logs
+docker logs <container_id>
+
+# List running processes
+docker ps
+
+# View processes inside container
+docker top <container_id>
+
+# Execute commands in running container
+docker container exec -it <mysql> bash
+```
+
+## Image Operations
+
+### Image Management
+```bash
+# List images
+docker images ls
+
+# View image history and layers
+docker history nginx:latest
+
+# Remove images
+docker rmi nginx:1.27.5
+
+# Remove dangling images
+docker rmi $(docker images -f "dangling=true" -q)
+
+# Clean up unused images
+docker image prune
+docker image prune -a  # Remove all unused images
+
+# System-wide cleanup
+docker system prune -a --volumes -f
+```
+
+### Image Tagging and Distribution
+```bash
+# Tag images
+docker tag nginx:latest akanoob/nginx:latest
+docker tag akanoob/nginx akanoob/nginx:testing
+
+# Push to registry
+docker login
+docker push akanoob/nginx:latest
+docker image push akanoob/nginx:testing
+```
+
+## Volume Management
+
+### Volume Operations
+```bash
+# List volumes
+docker volume ls
+
+# Create volume
+docker volume create my-volume
+
+# Inspect volume
+docker volume inspect my-volume
+
+# Container with named volume
+docker container run -d --name my-container -v my-volume:/data nginx
+
+# Bind mount (current directory)
+docker container run -d --name my-container -v $(pwd):/usr/share/nginx/html nginx
+
+# Jekyll development server with bind mount
+docker container run -d -p 80:4000 --name my-container \
+  -v $(pwd):/site bretfisher/jekyll-serve
+```
+
+## Environment Variables
+
+Environment variables are crucial for configuring containerized applications. They provide a clean way to pass configuration without rebuilding images.
+
+### Setting Environment Variables at Runtime
+
+#### Single Environment Variable
+```bash
+# Set single environment variable
+docker run -e NODE_ENV=production nginx
+
+# Set with value assignment
+docker run -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" myapp
+
+# Set environment variable from host environment
+docker run -e HOST_IP myapp  # Uses $HOST_IP from host
+```
+
+#### Multiple Environment Variables
+```bash
+# Multiple -e flags
+docker run \
+  -e NODE_ENV=production \
+  -e PORT=3000 \
+  -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" \
+  -e REDIS_URL="redis://localhost:6379" \
+  myapp
+
+# Using environment file
+docker run --env-file .env myapp
+
+# Combine both methods
+docker run --env-file .env -e OVERRIDE_VAR=value myapp
+```
+
+### Environment Files (.env)
+
+#### Creating Environment Files
+```bash
+# .env file example
+NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb
+REDIS_URL=redis://localhost:6379
+API_KEY=your-secret-api-key
+DEBUG=false
+
+# .env.development
+NODE_ENV=development
+PORT=3000
+DATABASE_URL=postgresql://user:pass@localhost:5432/mydb_dev
+DEBUG=true
+```
+
+#### Using Environment Files
+```bash
+# Load from default .env file
+docker run --env-file .env myapp
+
+# Load from specific file
+docker run --env-file .env.production myapp
+
+# Load multiple env files (last one takes precedence)
+docker run --env-file .env --env-file .env.local myapp
+```
+
+### Environment Variables in Dockerfile
+
+#### Setting Default Values
+```dockerfile
+# Set environment variables with default values
+ENV NODE_ENV=development
+ENV PORT=3000
+ENV LOG_LEVEL=info
+
+# Multiple variables in one line
+ENV NODE_ENV=development \
+    PORT=3000 \
+    LOG_LEVEL=info
+
+# Using ARG for build-time variables
+ARG BUILD_VERSION=latest
+ENV APP_VERSION=$BUILD_VERSION
+```
+
+#### Advanced Environment Configuration
+```dockerfile
+FROM node:18-alpine
+
+# Build arguments (available during build)
+ARG NODE_ENV=production
+ARG BUILD_DATE
+ARG GIT_COMMIT
+
+# Environment variables (available at runtime)
+ENV NODE_ENV=$NODE_ENV
+ENV BUILD_DATE=$BUILD_DATE
+ENV GIT_COMMIT=$GIT_COMMIT
+ENV APP_DIR=/usr/src/app
+ENV PATH=$APP_DIR/node_modules/.bin:$PATH
+
+WORKDIR $APP_DIR
+
+# Use environment variables in commands
+RUN if [ "$NODE_ENV" = "development" ]; then \
+      npm install; \
+    else \
+      npm ci --only=production; \
+    fi
+
+EXPOSE $PORT
+CMD ["node", "server.js"]
+```
+
+### Environment Variable Best Practices
+
+#### Secure Environment Variables
+```bash
+# ❌ Bad: Exposing secrets in command line
+docker run -e DB_PASSWORD=mysecret myapp
+
+# ✅ Good: Using environment file
+echo "DB_PASSWORD=mysecret" > .env.local
+chmod 600 .env.local
+docker run --env-file .env.local myapp
+
+# ✅ Good: Using Docker secrets (in swarm mode)
+echo "mysecret" | docker secret create db_password -
+docker service create --secret db_password myapp
+
+# ✅ Good: Reading from host environment
+export DB_PASSWORD="mysecret"
+docker run -e DB_PASSWORD myapp
+```
+
+#### Environment Variable Validation
+```dockerfile
+FROM alpine:3.18
+
+# Set required environment variables
+ENV REQUIRED_VAR=""
+ENV OPTIONAL_VAR="default_value"
+
+# Validate required environment variables
+RUN if [ -z "$REQUIRED_VAR" ]; then \
+      echo "ERROR: REQUIRED_VAR must be set" && exit 1; \
+    fi
+
+# Create validation script
+COPY validate-env.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/validate-env.sh
+
+# Validate environment on startup
+ENTRYPOINT ["/usr/local/bin/validate-env.sh"]
+CMD ["your-app"]
+```
+
+#### Validation Script Example
+```bash
+#!/bin/sh
+# validate-env.sh
+
+# Required environment variables
+REQUIRED_VARS="DATABASE_URL REDIS_URL API_KEY"
+
+for var in $REQUIRED_VARS; do
+    eval value=\$var
+    if [ -z "$value" ]; then
+        echo "ERROR: Required environment variable $var is not set"
+        exit 1
+    fi
+done
+
+echo "Environment validation passed"
+exec "$@"
+```
+
+### Environment Variables in Docker Compose
+
+#### Basic Configuration
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:password@db:5432/myapp
+    # Or using object syntax
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:password@db:5432/myapp
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: myapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+```
+
+#### Using Environment Files with Compose
+```yaml
+# docker-compose.yml
+version: '3.8'
+
+services:
+  web:
+    build: .
+    env_file:
+      - .env
+      - .env.local
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@db:5432/${DB_NAME}
+
+  db:
+    image: postgres:15
+    env_file: .env.db
+```
+
+### Dynamic Environment Variables
+
+#### Runtime Environment Detection
+```dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+
+# Create dynamic environment script
+RUN cat > /usr/local/bin/setup-env.sh << 'EOF'
+#!/bin/sh
+
+# Detect environment based on hostname or other factors
+if [ "$HOSTNAME" = "production-server" ]; then
+    export NODE_ENV=production
+    export LOG_LEVEL=warn
+elif [ "$HOSTNAME" = "staging-server" ]; then
+    export NODE_ENV=staging
+    export LOG_LEVEL=info
+else
+    export NODE_ENV=development
+    export LOG_LEVEL=debug
+fi
+
+# Set computed values
+export BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+export CONTAINER_ID=$(hostname)
+
+exec "$@"
+EOF
+
+RUN chmod +x /usr/local/bin/setup-env.sh
+
+ENTRYPOINT ["/usr/local/bin/setup-env.sh"]
+CMD ["npm", "start"]
+```
+
+### Environment Variable Templates
+
+#### Configuration Template System
+```bash
+# config-template.json
+{
+  "database": {
+    "host": "${DB_HOST}",
+    "port": "${DB_PORT}",
+    "name": "${DB_NAME}",
+    "user": "${DB_USER}",
+    "password": "${DB_PASSWORD}"
+  },
+  "redis": {
+    "url": "${REDIS_URL}"
+  },
+  "logging": {
+    "level": "${LOG_LEVEL:-info}"
+  }
+}
+```
+
+```dockerfile
+FROM alpine:3.18
+
+# Install envsubst for template processing
+RUN apk add --no-cache gettext
+
+COPY config-template.json /app/
+COPY entrypoint.sh /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+```
+
+```bash
+#!/bin/sh
+# entrypoint.sh
+
+# Generate config from template
+envsubst < /app/config-template.json > /app/config.json
+
+# Validate generated config
+if ! cat /app/config.json | jq empty; then
+    echo "ERROR: Generated config is not valid JSON"
+    exit 1
+fi
+
+exec "$@"
+```
+
+### Environment Variable Debugging
+
+#### Inspection Commands
+```bash
+# View environment variables in running container
+docker exec container_name env
+
+# View specific environment variable
+docker exec container_name printenv NODE_ENV
+
+# Debug environment issues
+docker run --rm -it myapp env
+docker run --rm -it myapp sh -c 'echo "NODE_ENV=$NODE_ENV"'
+
+# Compare environments
+docker run --env-file .env.dev myapp env > dev-env.txt
+docker run --env-file .env.prod myapp env > prod-env.txt
+diff dev-env.txt prod-env.txt
+```
+
+### Common Environment Patterns
+
+#### Application Configuration
+```bash
+# Web application
+docker run \
+  -e NODE_ENV=production \
+  -e PORT=3000 \
+  -e SESSION_SECRET=your-session-secret \
+  -e DATABASE_URL=postgresql://user:pass@db:5432/app \
+  -e REDIS_URL=redis://redis:6379 \
+  web-app
+
+# Database
+docker run \
+  -e POSTGRES_DB=myapp \
+  -e POSTGRES_USER=appuser \
+  -e POSTGRES_PASSWORD=secure-password \
+  -e POSTGRES_INITDB_ARGS="--encoding=UTF-8 --lc-collate=C --lc-ctype=C" \
+  postgres:15
+
+# Cache
+docker run \
+  -e REDIS_PASSWORD=cache-password \
+  -e REDIS_MAXMEMORY=256mb \
+  -e REDIS_MAXMEMORY_POLICY=allkeys-lru \
+  redis:7-alpine
+```
+
+This comprehensive environment variable section covers all aspects from basic usage to advanced patterns, security considerations, and debugging techniques.
+
+### Security-First Dockerfile
+```dockerfile
+# Use minimal base image
+FROM gcr.io/distroless/static-debian10
+
+# Create non-root user
+FROM alpine:3.12
+RUN adduser -D myuser && chown -R myuser /myapp-data
+
+# Copy files without changing ownership
+COPY app-files/ /app
+
+# Switch to non-root user
+USER myuser
+
+# Set working directory
+WORKDIR /app
+
+# Expose only necessary ports
+EXPOSE 8080
+
+# Use COPY instead of ADD
+COPY requirements.txt .
+
+# Combine RUN commands to reduce layers
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    && pip3 install -r requirements.txt \
+    && rm -rf /var/cache/apk/*
+
+# Set environment variables
+ENV APP_ENV=production
+ENV APP_TMP_DATA=/tmp
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# Default command
+CMD ["python3", "app.py"]
+```
+
+### Multi-stage Build Example
+```dockerfile
+# Build stage
+FROM golang:1.19-alpine as builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+# Final stage
+FROM gcr.io/distroless/static-debian11
+COPY --from=builder /app/main /
+USER nonroot:nonroot
+EXPOSE 8080
+ENTRYPOINT ["/main"]
+```
+
+### Dockerfile Instructions Reference
+```dockerfile
+# Build-time instructions
+FROM ubuntu:20.04           # Base image
+COPY src/ /app/            # Copy files
+RUN apt-get update         # Execute commands
+EXPOSE 8080               # Document port
+ENV NODE_ENV=production   # Environment variable
+WORKDIR /app              # Set working directory
+ARG BUILD_VERSION         # Build argument
+
+# Runtime instructions
+CMD ["npm", "start"]      # Default command
+ENTRYPOINT ["/app/start"] # Fixed entry point
+USER appuser              # Run as user
+VOLUME ["/data"]          # Mount point
+```
+
+## Network Configuration
+
+### Network Management
+```bash
+# List networks
+docker network ls
+
+# Create custom network
+docker network create my-network
+
+# Run container in custom network
+docker run -d --name web --network my-network nginx
+
+# Connect container to network
+docker network connect my-network container_name
+
+# Inspect network
+docker network inspect my-network
+```
+
+## Security Best Practices
+
+### Rootless Containers
+```dockerfile
+# Bad practice - running as root
+FROM ubuntu:20.04
+COPY app /app
+CMD ["/app"]
+
+# Good practice - non-root user
+FROM ubuntu:20.04
+RUN useradd -m -u 1000 appuser
+COPY --chown=root:root app /app
+RUN chmod 755 /app
+USER appuser
+CMD ["/app"]
+```
+
+### Secure Image Building
+```bash
+# Build with security context
+docker build --no-cache -t secure-app .
+
+# Scan image for vulnerabilities
+docker scan secure-app
+
+# Run with limited capabilities
+docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE app
+
+# Run with read-only filesystem
+docker run --read-only --tmpfs /tmp app
+```
+
+### Content Trust
+```bash
+# Enable Docker Content Trust
+export DOCKER_CONTENT_TRUST=1
+
+# Sign and push image
+docker push myregistry/myapp:latest
+
+# Pull with signature verification
+docker pull myregistry/myapp:latest
+```
+
+## Advanced Operations
+
+### Docker Compose Integration
+```yaml
+# docker-compose.yml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "80:8080"
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+    user: "1000:1000"
+    read_only: true
+    tmpfs:
+      - /tmp
+```
+
+### Health Checks
+```bash
+# Container with health check
+docker run -d \
+  --name healthy-app \
+  --health-cmd="curl -f http://localhost:8080/health || exit 1" \
+  --health-interval=30s \
+  --health-timeout=10s \
+  --health-retries=3 \
+  myapp:latest
+```
+
+### Resource Limits
+```bash
+# Run with resource constraints
+docker run -d \
+  --name limited-app \
+  --memory=512m \
+  --cpus=1.5 \
+  --restart=unless-stopped \
+  myapp:latest
+```
+
+## Best Practices Summary
+
+### Image Optimization
+- Use multi-stage builds to reduce image size
+- Choose minimal base images (distroless, alpine)
+- Combine RUN commands to minimize layers
+- Use .dockerignore to exclude unnecessary files
+
+### Security
+- Never run containers as root
+- Scan images for vulnerabilities
+- Use specific image tags, not `latest`
+- Keep base images updated
+- Enable Docker Content Trust
+
+### Performance
+- Order Dockerfile instructions by change frequency
+- Use build cache effectively
+- Minimize build context size
+- Use appropriate restart policies
+
+### Monitoring
+- Implement health checks
+- Use structured logging
+- Monitor resource usage
+- Set up proper log rotation
+
+## Common Patterns
+
+### Development Workflow
+```bash
+# Development setup
+docker build -t myapp:dev .
+docker run -d -p 3000:3000 -v $(pwd):/app --name dev-container myapp:dev
+
+# Production deployment
+docker build -t myapp:prod --target production .
+docker run -d -p 80:8080 --restart=always --name prod-container myapp:prod
+```
+
+### Debugging Containers
+```bash
+# Debug running container
+docker exec -it container_name /bin/sh
+
+# Copy files from container
+docker cp container_name:/app/logs ./logs
+
+# View container resource usage
+docker stats container_name
+
+# Inspect container configuration
+docker inspect container_name
+```

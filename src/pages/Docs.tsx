@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SearchBar from '../components/SearchBar'; // Import your SearchBar component
 
 interface Doc {
   slug: string;
@@ -10,6 +11,7 @@ interface Doc {
 
 function Docs() {
   const [docs, setDocs] = useState<Doc[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     async function loadDocs() {
@@ -28,11 +30,16 @@ function Docs() {
     loadDocs();
   }, []);
 
+  const filteredDocs = docs.filter((doc) =>
+    doc.frontmatter.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="space-y-8">
       <h1 className="text-3xl font-bold">Documentation</h1>
+      <SearchBar onSearch={setSearchTerm} placeholser="Search Docs..."/>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {docs.map((doc) => (
+        {filteredDocs.map((doc) => (
           <Link
             key={doc.slug}
             to={`/docs/${doc.slug}`}

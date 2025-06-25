@@ -1,6 +1,29 @@
 import React, { useEffect, useRef } from 'react';
 import { useRelativeMouse } from '../../utils/useRelativeMouse';
+import { Link } from 'react-router-dom';
+import {
+  FaGithub,
+  FaDev,
+  FaLinkedin,
+  FaTwitter,
+  FaYoutube,
+  FaInstagram,
+  FaStackOverflow,
+  FaDocker,
+  FaNpm,
+} from 'react-icons/fa';
 
+const SOCIAL_LINKS = [
+  { name: 'GitHub', icon: <FaGithub />, url: 'https://github.com/yourusername' },
+  { name: 'Dev.to', icon: <FaDev />, url: 'https://dev.to/yourusername' },
+  { name: 'LinkedIn', icon: <FaLinkedin />, url: 'https://linkedin.com/in/yourusername' },
+  { name: 'Twitter/X', icon: <FaTwitter />, url: 'https://twitter.com/yourusername' },
+  { name: 'YouTube', icon: <FaYoutube />, url: 'https://youtube.com/yourchannel' },
+  { name: 'Instagram', icon: <FaInstagram />, url: 'https://instagram.com/yourusername' },
+  { name: 'Stack Overflow', icon: <FaStackOverflow />, url: 'https://stackoverflow.com/users/youruserid' },
+  { name: 'DockerHub', icon: <FaDocker />, url: 'https://hub.docker.com/u/yourusername' },
+  { name: 'npm', icon: <FaNpm />, url: 'https://www.npmjs.com/~yourusername' },
+];
 const Footer: React.FC = () => {
   const footerRef = useRef<HTMLElement | null>(null);
   const dotsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -44,8 +67,8 @@ const Footer: React.FC = () => {
         const strength = Math.max(0, (maxDistance - distance) / maxDistance);
 
         if (strength > 0) {
-          const moveX = -(deltaX / distance) * strength * 30;
-          const moveY = -(deltaY / distance) * strength * 30;
+          const moveX = -(deltaX / distance) * strength * 10;
+          const moveY = -(deltaY / distance) * strength * 10;
 
           dot.style.transform = `translate(${moveX}px, ${moveY}px)`;
           dot.style.opacity = Math.min(1, 0.4 + strength * 0.6).toString();
@@ -79,17 +102,26 @@ const Footer: React.FC = () => {
       <div className="max-w mx-auto relative z-10">
         {/* Top Menu */}
         <div className="flex justify-center space-x-10 mb-1">
-          {['Articles', 'Design Challenges', 'Tools Database', '2024 Survey'].map((item, idx) => (
-            <a key={idx} href="#" className="hover:text-white transition-colors duration-200">
-              {item}
+          {[
+              { name: 'Docker CLI Guide', url: '/portfolio/docs/docker-cli-guid' },
+              { name: 'Shell Scripting for DevOps', url: '/portfolio/docs/shell-script-devops' },
+              { name: 'Tools Database', url: '/tools' },
+              { name: '2024 Survey', url: '/survey-2024' },
+            ].map((item, idx) => (
+            <a
+              key={idx}
+              href={item.url}
+              className="hover:text-white transition-colors duration-200"
+            >
+              {item.name}
             </a>
           ))}
         </div>
 
         {/* Magnetic Dots Grid */}
         <div className="relative mb-10 h-80 overflow-hidden">
-          <div className="grid grid-cols-40 gap-1 place-items-center absolute inset-0 p-4">
-            {Array.from({ length: 400 }).map((_, i) => (
+          <div className="grid grid-cols-80 gap-1 place-items-center absolute inset-0 p-4">
+            {Array.from({ length: 800 }).map((_, i) => (
               <div
                 key={i}
                 ref={(el) => { dotsRef.current[i] = el; }}
@@ -110,21 +142,28 @@ const Footer: React.FC = () => {
             ))}
           </div>
           <div className="flex space-x-4">
-            {['X/Twitter', 'YouTube', 'LinkedIn', 'Instagram', 'TikTok'].map((item, idx) => (
-              <a key={idx} href="#" className="hover:text-white transition-colors duration-200">
-                {item}
-              </a>
-            ))}
+                  {SOCIAL_LINKS.map(({ name, icon, url }, idx) => (
+                    <a
+                      key={idx}
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors duration-200 group"
+                    >
+                      {icon}
+                      <span className="hidden md:group-hover:inline">{name}</span>
+                    </a>
+                  ))}
           </div>
         </div>
 
         {/* Footer Bottom */}
         <div className="flex justify-between items-center mt-6">
           <p className="text-gray-600">
-            &copy; 2025 – {new Date().getFullYear()} Design Tools. All rights reserved.
+            &copy;–{new Date().getFullYear()} Animesh Kumar. Designed for tomorrow, coded today.
           </p>
           <button className="border border-white px-3 py-1 text-white hover:bg-white hover:text-black transition-all duration-200">
-            blog
+           <Link to="/blog">Blog</Link>
           </button>
         </div>
       </div>
