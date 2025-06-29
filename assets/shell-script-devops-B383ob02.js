@@ -1,4 +1,4 @@
-import{j as n}from"./index-BL5hKHP4.js";const t={title:"Linux Shell Scripting Essentials for DevOps",description:"A comprehensive guide to mastering shell scripting for DevOps engineers. This guide covers everything from basic commands to advanced scripting techniques with practical examples."};function s(e){const r={a:"a",code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h2,{children:"Table of Contents"}),`
+import{j as n}from"./index-BnDyFvVW.js";const t={title:"Linux Shell Scripting Essentials for DevOps",description:"A comprehensive guide to mastering shell scripting for DevOps engineers. This guide covers everything from basic commands to advanced scripting techniques with practical examples."};function s(e){const r={a:"a",code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h2,{children:"Table of Contents"}),`
 `,n.jsxs(r.ol,{children:[`
 `,n.jsx(r.li,{children:n.jsx(r.a,{href:"#introduction-to-shell-scripting",children:"Introduction to Shell Scripting"})}),`
 `,n.jsx(r.li,{children:n.jsx(r.a,{href:"#shell-script-fundamentals",children:"Shell Script Fundamentals"})}),`
@@ -784,12 +784,7 @@ done
 `})}),`
 `,n.jsx(r.h3,{children:"Bash Startup Files"}),`
 `,n.jsx(r.p,{children:n.jsx(r.strong,{children:"Understanding Bash Startup Files:"})}),`
-`,n.jsxs(r.p,{children:[`| File              | When Executed                | Purpose                          |\r
-|-------------------|-----------------------------|----------------------------------|\r
-| `,n.jsx(r.code,{children:"~/.bashrc"}),`       | Interactive non-login shell  | Aliases, functions, shell options|\r
-| `,n.jsx(r.code,{children:"~/.bash_profile"}),` | Login shell                  | Environment variables, PATH      |\r
-| `,n.jsx(r.code,{children:"~/.profile"}),`      | Login shell (fallback)       | POSIX-compliant settings         |\r
-| `,n.jsx(r.code,{children:"~/.bash_logout"}),"  | Shell exit                   | Cleanup tasks                    |"]}),`
+`,n.jsxs("table",{children:[n.jsx("thead",{children:n.jsxs("tr",{children:[n.jsx("th",{children:"File"}),n.jsx("th",{children:"When Executed"}),n.jsx("th",{children:"Purpose"})]})}),n.jsxs("tbody",{children:[n.jsxs("tr",{children:[n.jsx("td",{children:n.jsx("code",{children:"~/.bashrc"})}),n.jsx("td",{children:"Interactive non-login shell"}),n.jsx("td",{children:"Aliases, functions, shell options"})]}),n.jsxs("tr",{children:[n.jsx("td",{children:n.jsx("code",{children:"~/.bash_profile"})}),n.jsx("td",{children:"Login shell"}),n.jsx("td",{children:"Environment variables, PATH"})]}),n.jsxs("tr",{children:[n.jsx("td",{children:n.jsx("code",{children:"~/.profile"})}),n.jsx("td",{children:"Login shell (fallback)"}),n.jsx("td",{children:"POSIX-compliant settings"})]}),n.jsxs("tr",{children:[n.jsx("td",{children:n.jsx("code",{children:"~/.bash_logout"})}),n.jsx("td",{children:"Shell exit"}),n.jsx("td",{children:"Cleanup tasks"})]})]})]}),`
 `,n.jsx(r.p,{children:n.jsx(r.strong,{children:"Sample ~/.bashrc for DevOps:"})}),`
 `,n.jsx(r.pre,{children:n.jsx(r.code,{className:"language-bash",children:`# ~/.bashrc\r
 \r

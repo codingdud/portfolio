@@ -1,4 +1,4 @@
-import{j as n}from"./index-BL5hKHP4.js";const s={title:"Docker CLI Complete Guide",description:"The guide follows modern Docker practices with real-world examples and security-first approaches, making it suitable for both development and production environments."};function i(r){const e={a:"a",code:"code",h2:"h2",h3:"h3",h4:"h4",li:"li",p:"p",pre:"pre",ul:"ul",...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Table of Contents"}),`
+import{j as n}from"./index-BnDyFvVW.js";const s={title:"Docker CLI Complete Guide",description:"The guide follows modern Docker practices with real-world examples and security-first approaches, making it suitable for both development and production environments."};function i(r){const e={a:"a",code:"code",h2:"h2",h3:"h3",h4:"h4",li:"li",p:"p",pre:"pre",ul:"ul",...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Table of Contents"}),`
 `,n.jsxs(e.ul,{children:[`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#environment-setup",children:"Environment Setup"})}),`
 `,n.jsx(e.li,{children:n.jsx(e.a,{href:"#container-management",children:"Container Management"})}),`
