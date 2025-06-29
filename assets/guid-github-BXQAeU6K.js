@@ -1,4 +1,4 @@
-import{j as e}from"./index-D75OJl6g.js";const l={title:"📚 Guide to Contributing to a GitHub Project",description:"Contributing to an open-source project on GitHub is a rewarding way to improve your coding skills, collaborate with others, and give back to the community. This guide walks you through the essential steps to contribute effectively using Git and GitHub."};function i(s){const n={a:"a",blockquote:"blockquote",br:"br",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h2,{children:"🔁 Step 1: Fork the Project"}),`
+import{j as e}from"./index-BL5hKHP4.js";const l={title:"📚 Guide to Contributing to a GitHub Project",description:"Contributing to an open-source project on GitHub is a rewarding way to improve your coding skills, collaborate with others, and give back to the community. This guide walks you through the essential steps to contribute effectively using Git and GitHub."};function i(s){const n={a:"a",blockquote:"blockquote",br:"br",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h2,{children:"🔁 Step 1: Fork the Project"}),`
 `,e.jsxs(n.p,{children:["If you don’t have write access to a project, ",e.jsx(n.strong,{children:"fork"})," it first:"]}),`
 `,e.jsxs(n.ol,{children:[`
 `,e.jsx(n.li,{children:"Go to the project’s GitHub page."}),`
@@ -152,17 +152,7 @@ git push origin master
 `]}),`
 `,e.jsx(n.hr,{}),`
 `,e.jsx(n.h2,{children:"🏁 Summary"}),`
-`,e.jsx(n.p,{children:`| Step | Action |\r
-|------|--------|\r
-| 1    | Fork the project |\r
-| 2    | Clone your fork |\r
-| 3    | Create a topic branch |\r
-| 4    | Make and commit changes |\r
-| 5    | Push your branch |\r
-| 6    | Open a Pull Request |\r
-| 7    | Respond to reviews |\r
-| 8    | Keep your PR updated |\r
-| 9    | Wait for merge/close |`}),`
+`,e.jsxs("table",{children:[e.jsx("thead",{children:e.jsxs("tr",{children:[e.jsx("th",{children:"Step"}),e.jsx("th",{children:"Action"})]})}),e.jsxs("tbody",{children:[e.jsxs("tr",{children:[e.jsx("td",{children:"1"}),e.jsx("td",{children:"Fork the project"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"2"}),e.jsx("td",{children:"Clone your fork"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"3"}),e.jsx("td",{children:"Create a topic branch"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"4"}),e.jsx("td",{children:"Make and commit changes"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"5"}),e.jsx("td",{children:"Push your branch"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"6"}),e.jsx("td",{children:"Open a Pull Request"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"7"}),e.jsx("td",{children:"Respond to reviews"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"8"}),e.jsx("td",{children:"Keep your PR updated"})]}),e.jsxs("tr",{children:[e.jsx("td",{children:"9"}),e.jsx("td",{children:"Wait for merge/close"})]})]})]}),`
 `,e.jsx(n.hr,{}),`
 `,e.jsx(n.h2,{children:"🧰 Tools & Resources"}),`
 `,e.jsxs(n.ul,{children:[`
