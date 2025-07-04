@@ -1,5 +1,4 @@
-import{j as n}from"./index-BPj_RLLJ.js";const t={title:"🎬 Streaming Platform System Design Interview",date:"2025-02-01",tags:["react","forms"]};function i(r){const e={code:"code",h1:"h1",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h1,{children:"🎬 Streaming Platform System Design Interview"}),`
-`,n.jsx(e.h2,{children:"Interview Question"}),`
+import{u as s,j as n}from"./index-Bq10NSqr.js";const a={title:"🎬 Streaming Platform System Design Interview",date:"2025-06-07",tags:["System-Design","Streaming","Netflix"]};function i(r){const e={code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s(),...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Interview Question"}),`
 `,n.jsx(e.p,{children:n.jsx(e.strong,{children:"Design a video streaming platform like Netflix that can serve millions of users worldwide with high availability, low latency, and personalized content recommendations."})}),`
 `,n.jsx(e.hr,{}),`
 `,n.jsx(e.h2,{children:"1. Requirements Clarification"}),`
@@ -567,5 +566,4 @@ import{j as n}from"./index-BPj_RLLJ.js";const t={title:"🎬 Streaming Platform 
 `,n.jsxs(e.li,{children:[n.jsx(e.strong,{children:"Horizontal Scaling"}),": Add more servers for long-term growth"]}),`
 `,n.jsxs(e.li,{children:[n.jsx(e.strong,{children:"Caching"}),": Reduce database load through intelligent caching"]}),`
 `,n.jsxs(e.li,{children:[n.jsx(e.strong,{children:"CDN"}),": Distribute content globally for better performance"]}),`
-`]}),`
-`,n.jsx(e.p,{children:"This comprehensive system design covers all aspects of building a Netflix-scale streaming platform, from requirements gathering to implementation details, making it perfect for system design interviews."})]})}function a(r={}){const{wrapper:e}=r.components||{};return e?n.jsx(e,{...r,children:n.jsx(i,{...r})}):i(r)}export{a as default,t as frontmatter};
+`]})]})}function l(r={}){const{wrapper:e}={...s(),...r.components};return e?n.jsx(e,{...r,children:n.jsx(i,{...r})}):i(r)}export{l as default,a as frontmatter};

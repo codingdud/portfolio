@@ -1,4 +1,4 @@
-import{j as n}from"./index-BPj_RLLJ.js";const t={title:"Linux Shell Scripting Essentials for DevOps",description:"A comprehensive guide to mastering shell scripting for DevOps engineers. This guide covers everything from basic commands to advanced scripting techniques with practical examples."};function s(e){const r={a:"a",code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h2,{children:"Table of Contents"}),`
+import{u as i,j as n}from"./index-Bq10NSqr.js";const a={title:"Linux Shell Scripting Essentials for DevOps",description:"A comprehensive guide to mastering shell scripting for DevOps engineers. This guide covers everything from basic commands to advanced scripting techniques with practical examples."};function s(e){const r={a:"a",code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...i(),...e.components};return n.jsxs(n.Fragment,{children:[n.jsx(r.h2,{children:"Table of Contents"}),`
 `,n.jsxs(r.ol,{children:[`
 `,n.jsx(r.li,{children:n.jsx(r.a,{href:"#introduction-to-shell-scripting",children:"Introduction to Shell Scripting"})}),`
 `,n.jsx(r.li,{children:n.jsx(r.a,{href:"#shell-script-fundamentals",children:"Shell Script Fundamentals"})}),`
@@ -1101,4 +1101,4 @@ kill -KILL 1234    # Force kill\r
 kill -HUP 1234     # Hang up (reload config)\r
 kill -USR1 1234    # User-defined signal 1\r
 kill -USR2 1234    # User-defined signal 2
-`})})]})}function a(e={}){const{wrapper:r}=e.components||{};return r?n.jsx(r,{...e,children:n.jsx(s,{...e})}):s(e)}export{a as default,t as frontmatter};
+`})})]})}function l(e={}){const{wrapper:r}={...i(),...e.components};return r?n.jsx(r,{...e,children:n.jsx(s,{...e})}):s(e)}export{l as default,a as frontmatter};

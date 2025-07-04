@@ -1,4 +1,4 @@
-import{j as e}from"./index-BPj_RLLJ.js";const l={title:"📚 Guide to Contributing to a GitHub Project",description:"Contributing to an open-source project on GitHub is a rewarding way to improve your coding skills, collaborate with others, and give back to the community. This guide walks you through the essential steps to contribute effectively using Git and GitHub."};function i(s){const n={a:"a",blockquote:"blockquote",br:"br",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h2,{children:"🔁 Step 1: Fork the Project"}),`
+import{u as r,j as e}from"./index-Bq10NSqr.js";const t={title:"📚 Guide to Contributing to a GitHub Project",description:"Contributing to an open-source project on GitHub is a rewarding way to improve your coding skills, collaborate with others, and give back to the community. This guide walks you through the essential steps to contribute effectively using Git and GitHub."};function i(s){const n={a:"a",blockquote:"blockquote",br:"br",code:"code",em:"em",h1:"h1",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...r(),...s.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h2,{children:"🔁 Step 1: Fork the Project"}),`
 `,e.jsxs(n.p,{children:["If you don’t have write access to a project, ",e.jsx(n.strong,{children:"fork"})," it first:"]}),`
 `,e.jsxs(n.ol,{children:[`
 `,e.jsx(n.li,{children:"Go to the project’s GitHub page."}),`
@@ -271,4 +271,4 @@ git push origin master
 `,e.jsx(n.hr,{}),`
 `,e.jsx(n.h2,{children:"✅ Final Thoughts"}),`
 `,e.jsx(n.p,{children:"Mentioning issues in your commit messages and pull requests is a small step that significantly improves collaboration. It ensures transparency, keeps discussions connected to the actual code changes, and streamlines issue management."}),`
-`,e.jsx(n.p,{children:"Happy contributing! 🚀"})]})}function t(s={}){const{wrapper:n}=s.components||{};return n?e.jsx(n,{...s,children:e.jsx(i,{...s})}):i(s)}export{t as default,l as frontmatter};
+`,e.jsx(n.p,{children:"Happy contributing! 🚀"})]})}function c(s={}){const{wrapper:n}={...r(),...s.components};return n?e.jsx(n,{...s,children:e.jsx(i,{...s})}):i(s)}export{c as default,t as frontmatter};
