@@ -4,6 +4,8 @@ date: 2025-06-07
 tags: [System-Design, Streaming, Netflix]
 ---
 
+import streamingSvg from '../../assets/blog_image/streaming.svg';
+
 ## Interview Question
 **Design a video streaming platform like Netflix that can serve millions of users worldwide with high availability, low latency, and personalized content recommendations.**
 
@@ -55,101 +57,7 @@ tags: [System-Design, Streaming, Netflix]
 ---
 
 ## 3. System Architecture
-
-```mermaid
-flowchart TB
-    subgraph Client["Client Layer"]
-        A[Web App] 
-        B[Mobile App]
-        C[Smart TV]
-        D[Gaming Console]
-    end
-    
-    subgraph CDN["CDN Layer"]
-        E[Global CDN]
-        F[Edge Servers]
-        G[Regional Cache]
-    end
-    
-    subgraph Gateway["API Gateway"]
-        H[Load Balancer]
-        I[API Gateway]
-        J[Rate Limiter]
-    end
-    
-    subgraph Services["Microservices"]
-        K[User Service]
-        L[Content Service]
-        M[Recommendation Service]
-        N[Search Service]
-        O[Analytics Service]
-        P[Video Processing]
-        Q[Notification Service]
-    end
-    
-    subgraph Data["Data Layer"]
-        R[User Database]
-        S[Content Database]
-        T[Analytics Database]
-        U[Search Index]
-        V[Cache Layer]
-    end
-    
-    subgraph Storage["Storage Layer"]
-        W[Video Storage]
-        X[Image Storage]
-        Y[Backup Storage]
-    end
-    
-    subgraph External["External Services"]
-        Z[Payment Gateway]
-        AA[Email Service]
-        BB[Push Notification]
-    end
-    
-    A --> H
-    B --> H
-    C --> H
-    D --> H
-    
-    H --> I
-    I --> J
-    J --> K
-    J --> L
-    J --> M
-    J --> N
-    J --> O
-    J --> P
-    J --> Q
-    
-    K --> R
-    L --> S
-    M --> T
-    N --> U
-    O --> T
-    
-    K --> V
-    L --> V
-    M --> V
-    N --> V
-    
-    P --> W
-    L --> X
-    W --> Y
-    
-    K --> Z
-    Q --> AA
-    Q --> BB
-    
-    A --> E
-    B --> E
-    C --> E
-    D --> E
-    
-    E --> F
-    F --> G
-    G --> W
-```
+<img src={streamingSvg} alt="Design System for Streaming platform"  />
 
 ---
 
