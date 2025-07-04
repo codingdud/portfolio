@@ -938,12 +938,37 @@ done
 
 **Understanding Bash Startup Files:**
 
-| File | When Executed | Purpose |
-|------|---------------|---------|
-| ~/.bashrc | Interactive non-login shell | Aliases, functions, shell options |
-| ~/.bash_profile | Login shell | Environment variables, PATH |
-| ~/.profile | Login shell (fallback) | POSIX-compliant settings |
-| ~/.bash_logout | Shell exit | Cleanup tasks |
+<table>
+    <thead>
+        <tr>
+            <th>File</th>
+            <th>When Executed</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>~/.bashrc</code></td>
+            <td>Interactive non-login shell</td>
+            <td>Aliases, functions, shell options</td>
+        </tr>
+        <tr>
+            <td><code>~/.bash_profile</code></td>
+            <td>Login shell</td>
+            <td>Environment variables, PATH</td>
+        </tr>
+        <tr>
+            <td><code>~/.profile</code></td>
+            <td>Login shell (fallback)</td>
+            <td>POSIX-compliant settings</td>
+        </tr>
+        <tr>
+            <td><code>~/.bash_logout</code></td>
+            <td>Shell exit</td>
+            <td>Cleanup tasks</td>
+        </tr>
+    </tbody>
+</table>
 
 **Sample ~/.bashrc for DevOps:**
 ```bash

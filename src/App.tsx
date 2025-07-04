@@ -5,6 +5,8 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Docs from './pages/Docs';
 import DocPost from './pages/DocPost';
+import MindMapList from './pages/MindMapList';
+import MindMapPage from './pages/MindMapPage';
 
 
 function App() {
@@ -16,7 +18,9 @@ function App() {
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/docs/" element={<Docs />} />
           <Route path="/docs/:slug" element={<DocPost />} />
+          <Route path="/mindmaps" element={<MindMapList />} />
         </Route>
+        <Route path="/mindmap/:id" element={<MindMapPage />} />
       </Routes>
   );
 }

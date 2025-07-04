@@ -1,0 +1,614 @@
+---
+title: 🎬 Streaming Platform System Design Interview
+date: 2025-02-01
+tags: [react, forms]
+---
+# 🎬 Streaming Platform System Design Interview
+
+
+## Interview Question
+**Design a video streaming platform like Netflix that can serve millions of users worldwide with high availability, low latency, and personalized content recommendations.**
+
+---
+
+## 1. Requirements Clarification
+
+### Functional Requirements
+- **Video Streaming**: Stream videos in multiple resolutions (480p, 720p, 1080p, 4K)
+- **User Management**: User registration, authentication, profiles, subscriptions
+- **Content Management**: Upload, store, and manage video content
+- **Search & Discovery**: Search videos by title, genre, actors, etc.
+- **Recommendations**: Personalized content suggestions based on viewing history
+- **Watch History**: Track what users have watched and resume functionality
+- **Multiple Profiles**: Support multiple user profiles per account
+- **Offline Viewing**: Download videos for offline consumption
+- **Social Features**: Ratings, reviews, watchlists
+
+### Non-Functional Requirements
+- **Scale**: 200M+ registered users, 50M+ concurrent users
+- **Availability**: 99.99% uptime (52 minutes downtime per year)
+- **Performance**: Video start time < 2 seconds, global latency < 100ms
+- **Storage**: 10PB+ of video content
+- **Bandwidth**: Handle 100+ Gbps of video traffic
+- **Security**: Content protection, DRM, user data security
+- **Consistency**: Eventual consistency for most operations, strong consistency for payments
+
+---
+
+## 2. Capacity Estimation
+
+### User Statistics
+- **Total Users**: 200M registered users
+- **Active Users**: 50M daily active users
+- **Concurrent Users**: 20M peak concurrent users
+- **New Videos**: 1000 new videos uploaded daily
+- **Watch Time**: 1 billion hours watched monthly
+
+### Storage Requirements
+- **Video Storage**: 10PB (average 5GB per video × 2M videos)
+- **Metadata Storage**: 1TB (user data, video metadata)
+- **Backup Storage**: 20PB (2x replication)
+
+### Bandwidth Requirements
+- **Peak Traffic**: 100+ Gbps
+- **Average Bitrate**: 5 Mbps per stream
+- **CDN Bandwidth**: 80% of traffic served from edge locations
+
+---
+
+## 3. System Architecture
+
+```mermaid
+graph TB
+    subgraph "Client Layer"
+        A[Web App] 
+        B[Mobile App]
+        C[Smart TV]
+        D[Gaming Console]
+    end
+    
+    subgraph "CDN Layer"
+        E[Global CDN]
+        F[Edge Servers]
+        G[Regional Cache]
+    end
+    
+    subgraph "API Gateway"
+        H[Load Balancer]
+        I[API Gateway]
+        J[Rate Limiter]
+    end
+    
+    subgraph "Microservices"
+        K[User Service]
+        L[Content Service]
+        M[Recommendation Service]
+        N[Search Service]
+        O[Analytics Service]
+        P[Video Processing]
+        Q[Notification Service]
+    end
+    
+    subgraph "Data Layer"
+        R[User Database]
+        S[Content Database]
+        T[Analytics Database]
+        U[Search Index]
+        V[Cache Layer]
+    end
+    
+    subgraph "Storage Layer"
+        W[Video Storage]
+        X[Image Storage]
+        Y[Backup Storage]
+    end
+    
+    subgraph "External Services"
+        Z[Payment Gateway]
+        AA[Email Service]
+        BB[Push Notification]
+    end
+    
+    A --> H
+    B --> H
+    C --> H
+    D --> H
+    
+    H --> I
+    I --> J
+    J --> K
+    J --> L
+    J --> M
+    J --> N
+    J --> O
+    J --> P
+    J --> Q
+    
+    K --> R
+    L --> S
+    M --> T
+    N --> U
+    O --> T
+    
+    K --> V
+    L --> V
+    M --> V
+    N --> V
+    
+    P --> W
+    L --> X
+    W --> Y
+    
+    K --> Z
+    Q --> AA
+    Q --> BB
+    
+    A --> E
+    B --> E
+    C --> E
+    D --> E
+    
+    E --> F
+    F --> G
+    G --> W
+```
+
+---
+
+## 4. Database Design
+
+### 4.1 User Database (MySQL - Master-Slave)
+
+```mermaid
+erDiagram
+    USERS {
+        bigint user_id PK
+        varchar email UK
+        varchar password_hash
+        varchar first_name
+        varchar last_name
+        enum subscription_type
+        datetime created_at
+        datetime updated_at
+        boolean is_active
+        varchar region
+    }
+    
+    PROFILES {
+        bigint profile_id PK
+        bigint user_id FK
+        varchar profile_name
+        varchar avatar_url
+        enum age_category
+        boolean is_kids_profile
+        datetime created_at
+    }
+    
+    SUBSCRIPTIONS {
+        bigint subscription_id PK
+        bigint user_id FK
+        enum plan_type
+        decimal monthly_fee
+        datetime start_date
+        datetime end_date
+        enum status
+        varchar payment_method_id
+    }
+    
+    USERS ||--o{ PROFILES : has
+    USERS ||--o{ SUBSCRIPTIONS : has
+```
+
+**Benefits:**
+- **ACID Compliance**: Ensures data consistency for critical user operations
+- **Mature Technology**: Well-established with extensive tooling and support
+- **Strong Consistency**: Important for billing and subscription management
+- **Replication**: Master-slave setup for read scalability
+
+### 4.2 Content Database (MongoDB - Replica Set)
+
+```mermaid
+erDiagram
+    VIDEOS {
+        ObjectId video_id PK
+        string title
+        string description
+        array genres
+        array cast
+        string director
+        int release_year
+        int duration_minutes
+        string content_rating
+        array languages
+        array subtitles
+        object metadata
+        datetime created_at
+        datetime updated_at
+        boolean is_active
+    }
+    
+    VIDEO_ASSETS {
+        ObjectId asset_id PK
+        ObjectId video_id FK
+        enum quality
+        string file_path
+        string cdn_url
+        bigint file_size
+        string format
+        datetime created_at
+    }
+    
+    THUMBNAILS {
+        ObjectId thumbnail_id PK
+        ObjectId video_id FK
+        string image_url
+        enum type
+        string resolution
+        datetime created_at
+    }
+    
+    VIDEOS ||--o{ VIDEO_ASSETS : has
+    VIDEOS ||--o{ THUMBNAILS : has
+```
+
+**Benefits:**
+- **Flexible Schema**: Easy to add new fields without migrations
+- **Horizontal Scaling**: Natural sharding capabilities
+- **JSON Storage**: Perfect for metadata and complex nested data
+- **Rich Indexing**: Supports complex queries on arrays and nested objects
+
+### 4.3 Analytics Database (Apache Cassandra)
+
+```mermaid
+erDiagram
+    VIEWING_HISTORY {
+        bigint user_id PK
+        timestamp watch_time PK
+        bigint video_id
+        bigint profile_id
+        int watch_duration_seconds
+        int total_duration_seconds
+        enum device_type
+        string device_id
+        float completion_percentage
+        string quality_watched
+        string region
+    }
+    
+    USER_ENGAGEMENT {
+        bigint user_id PK
+        date activity_date PK
+        int total_watch_time
+        int videos_watched
+        int search_queries
+        int recommendations_clicked
+        array genres_watched
+        enum most_active_time
+    }
+    
+    VIDEO_ANALYTICS {
+        bigint video_id PK
+        date analytics_date PK
+        bigint total_views
+        bigint unique_viewers
+        float avg_watch_time
+        float completion_rate
+        array popular_regions
+        int thumbs_up
+        int thumbs_down
+    }
+```
+
+**Benefits:**
+- **Time-Series Optimization**: Perfect for analytics and viewing history
+- **High Write Throughput**: Handles billions of events per day
+- **Eventual Consistency**: Acceptable for analytics use cases
+- **Partition Tolerance**: Distributed across multiple data centers
+
+### 4.4 Search Index (Elasticsearch)
+
+```mermaid
+erDiagram
+    SEARCH_INDEX {
+        string video_id PK
+        string title
+        text description
+        array genres
+        array cast
+        string director
+        int release_year
+        float popularity_score
+        float rating
+        array languages
+        string content_type
+        array tags
+        datetime indexed_at
+    }
+    
+    SEARCH_SUGGESTIONS {
+        string suggestion_id PK
+        string query_text
+        int frequency
+        float relevance_score
+        datetime last_updated
+    }
+```
+
+**Benefits:**
+- **Full-Text Search**: Advanced search capabilities with ranking
+- **Real-Time Indexing**: Near real-time search results
+- **Faceted Search**: Filter by genre, year, rating, etc.
+- **Autocomplete**: Fast suggestion generation
+
+---
+
+## 5. Key Features & Benefits
+
+### 5.1 Content Delivery Network (CDN)
+
+```mermaid
+graph LR
+    A[User Request] --> B[CDN Edge Server]
+    B --> C{Content Available?}
+    C -->|Yes| D[Serve from Edge]
+    C -->|No| E[Fetch from Origin]
+    E --> F[Cache at Edge]
+    F --> G[Serve to User]
+    D --> H[Update Cache Stats]
+    G --> H
+```
+
+**Benefits:**
+- **Low Latency**: Content served from nearest edge server
+- **Bandwidth Optimization**: Reduces origin server load by 80%
+- **Global Scale**: 15,000+ edge servers worldwide
+- **Cost Reduction**: Lower data transfer costs
+
+### 5.2 Video Processing Pipeline
+
+```mermaid
+sequenceDiagram
+    participant U as Upload Service
+    participant Q as Processing Queue
+    participant T as Transcoding Service
+    participant S as Storage Service
+    participant C as CDN
+    participant N as Notification Service
+    
+    U->>Q: Queue video for processing
+    Q->>T: Start transcoding job
+    T->>T: Generate multiple resolutions
+    T->>T: Create thumbnails
+    T->>S: Store processed files
+    S->>C: Upload to CDN
+    C->>N: Processing complete
+    N->>U: Notify success
+```
+
+**Benefits:**
+- **Multiple Quality Options**: 480p, 720p, 1080p, 4K support
+- **Adaptive Bitrate**: Automatically adjusts quality based on network
+- **Parallel Processing**: Multiple transcoding jobs simultaneously
+- **Thumbnail Generation**: Multiple thumbnail options for better UX
+
+### 5.3 Recommendation System
+
+```mermaid
+graph TB
+    A[User Viewing History] --> B[Collaborative Filtering]
+    C[Content Metadata] --> D[Content-Based Filtering]
+    E[User Demographics] --> F[Demographic Filtering]
+    G[Real-time Behavior] --> H[Session-based Recommendations]
+    
+    B --> I[ML Model Ensemble]
+    D --> I
+    F --> I
+    H --> I
+    
+    I --> J[Ranking Algorithm]
+    J --> K[A/B Testing]
+    K --> L[Personalized Recommendations]
+    
+    M[Feedback Loop] --> A
+    L --> M
+```
+
+**Benefits:**
+- **Personalization**: Improves user engagement by 35%
+- **Discovery**: Helps users find new content
+- **Retention**: Increases watch time and reduces churn
+- **Revenue**: Drives subscription renewals and upgrades
+
+### 5.4 Microservices Architecture
+
+```mermaid
+graph TB
+    subgraph "User Domain"
+        A[User Service]
+        B[Profile Service]
+        C[Subscription Service]
+    end
+    
+    subgraph "Content Domain"
+        D[Content Service]
+        E[Video Service]
+        F[Metadata Service]
+    end
+    
+    subgraph "Recommendation Domain"
+        G[Recommendation Service]
+        H[Analytics Service]
+        I[ML Model Service]
+    end
+    
+    subgraph "Infrastructure"
+        J[API Gateway]
+        K[Service Discovery]
+        L[Load Balancer]
+        M[Message Queue]
+    end
+    
+    J --> A
+    J --> D
+    J --> G
+    
+    A --> M
+    D --> M
+    G --> M
+    
+    K --> A
+    K --> D
+    K --> G
+```
+
+**Benefits:**
+- **Scalability**: Scale individual services based on demand
+- **Fault Isolation**: Failure in one service doesn't affect others
+- **Technology Diversity**: Use best technology for each service
+- **Team Autonomy**: Independent development and deployment
+
+---
+
+## 6. Performance Optimizations
+
+### 6.1 Caching Strategy
+
+```mermaid
+graph LR
+    A[User Request] --> B{Check Redis Cache}
+    B -->|Hit| C[Return Cached Data]
+    B -->|Miss| D[Query Database]
+    D --> E[Store in Cache]
+    E --> F[Return Data]
+    C --> G[Update Cache TTL]
+    F --> H[Log Cache Miss]
+```
+
+**Cache Layers:**
+- **CDN Cache**: Video content (TTL: 7 days)
+- **Redis Cache**: User sessions, metadata (TTL: 1 hour)
+- **Application Cache**: Search results, recommendations (TTL: 15 minutes)
+- **Database Cache**: Query result caching
+
+### 6.2 Database Optimization
+
+**Sharding Strategy:**
+- **User Database**: Shard by user_id (consistent hashing)
+- **Content Database**: Shard by video_id or region
+- **Analytics Database**: Partition by time + user_id
+
+**Read Replicas:**
+- **User Service**: 3 read replicas per region
+- **Content Service**: 5 read replicas globally
+- **Analytics**: Read-only replicas for reporting
+
+---
+
+## 7. Security & Compliance
+
+### 7.1 Content Protection (DRM)
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant A as Auth Service
+    participant L as License Server
+    participant D as DRM Service
+    participant S as Streaming Service
+    
+    C->>A: Authenticate user
+    A->>C: Return JWT token
+    C->>L: Request content license
+    L->>D: Validate user permissions
+    D->>L: Generate encrypted license
+    L->>C: Return license
+    C->>S: Request encrypted content
+    S->>C: Stream protected content
+```
+
+**Benefits:**
+- **Content Protection**: Prevents unauthorized copying
+- **Geo-blocking**: Enforce regional content licensing
+- **Device Limitation**: Control playback on registered devices
+- **Compliance**: Meet content provider requirements
+
+### 7.2 Security Measures
+
+- **Authentication**: OAuth 2.0 with JWT tokens
+- **Authorization**: Role-based access control (RBAC)
+- **Encryption**: TLS 1.3 for data in transit, AES-256 for data at rest
+- **API Security**: Rate limiting, input validation, SQL injection prevention
+- **Monitoring**: Real-time threat detection and response
+
+---
+
+## 8. Monitoring & Observability
+
+### 8.1 Key Metrics
+
+**System Metrics:**
+- **Response Time**: 95th percentile < 100ms
+- **Throughput**: Requests per second
+- **Error Rate**: < 0.1% error rate
+- **Availability**: 99.99% uptime
+
+**Business Metrics:**
+- **User Engagement**: Daily/Monthly active users
+- **Content Performance**: View counts, completion rates
+- **Revenue**: Subscription conversions, churn rate
+- **Quality**: Video start failures, buffering events
+
+### 8.2 Alerting Strategy
+
+```mermaid
+graph TB
+    A[Metrics Collection] --> B[Anomaly Detection]
+    B --> C{Threshold Exceeded?}
+    C -->|Yes| D[Generate Alert]
+    C -->|No| E[Continue Monitoring]
+    D --> F[PagerDuty/Slack]
+    F --> G[On-call Engineer]
+    G --> H[Investigate & Fix]
+    H --> I[Post-mortem]
+```
+
+---
+
+## 9. Scalability & Future Considerations
+
+### 9.1 Auto-scaling Strategy
+
+- **Horizontal Scaling**: Kubernetes with HPA (Horizontal Pod Autoscaler)
+- **Database Scaling**: Read replicas, sharding, connection pooling
+- **CDN Scaling**: Dynamic edge server provisioning
+- **Cost Optimization**: Reserved instances, spot instances for batch processing
+
+### 9.2 Future Enhancements
+
+- **AI-Powered Features**: Content generation, automated subtitles
+- **Interactive Content**: Choose-your-own-adventure videos
+- **Live Streaming**: Real-time sports and events
+- **Mobile-First**: Optimized for mobile viewing patterns
+- **Edge Computing**: Processing at edge locations
+
+---
+
+## 10. Interview Discussion Points
+
+### Trade-offs Made:
+1. **Consistency vs Availability**: Chose eventual consistency for analytics
+2. **Cost vs Performance**: CDN costs vs user experience
+3. **Complexity vs Maintainability**: Microservices vs monolithic architecture
+
+### Bottlenecks Identified:
+1. **Video Processing**: CPU-intensive transcoding operations
+2. **Database Queries**: Complex recommendation queries
+3. **Network Bandwidth**: Peak traffic handling
+
+### Scaling Strategies:
+1. **Vertical Scaling**: Upgrade hardware for immediate relief
+2. **Horizontal Scaling**: Add more servers for long-term growth
+3. **Caching**: Reduce database load through intelligent caching
+4. **CDN**: Distribute content globally for better performance
+
+This comprehensive system design covers all aspects of building a Netflix-scale streaming platform, from requirements gathering to implementation details, making it perfect for system design interviews.

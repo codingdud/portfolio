@@ -26,6 +26,7 @@ function Header() {
         <div className="space-x-4">
           <Link to="/blog" className="hover:text-blue-400">Blog</Link>
           <Link to="/docs" className="hover:text-blue-400">Docs</Link>
+          <Link to="/mindmaps" className="hover:text-blue-400">Mind Map</Link>
           <a
             href="https://github.com/codingdud"
             target="_blank"

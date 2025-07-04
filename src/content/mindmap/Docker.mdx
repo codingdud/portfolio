@@ -1,0 +1,293 @@
+---
+title: "Docker CLI guide"
+icon: FaDocker
+image: "https://res.cloudinary.com/dkon1kh9h/image/upload/v1750871256/6794be25f9eeb88fc50858f8/685c2c356b9b48e24a35679f/b2jz6kubozxncczoyk0z.jpg"
+raw: |
+  # 🐳 Docker CLI <!-- markmap: foldAll -->
+
+  ## 🔧 Environment Setup
+  ### Docker Host Configuration
+  - `export DOCKER_HOST=ssh://root@142.244.156.151` - Set remote Docker host
+  - `unset DOCKER_HOST` - Reset to local Docker
+  - `docker version` - Verify Docker installation
+  - `docker info` - Display system-wide information
+
+  ## 📦 Container Management
+  ### Running Containers  
+  - `docker container run -p 80:80 nginx` - Basic container run
+  - `docker container run -d -p 80:80 nginx` - Run in detached mode
+  - `docker container run -d -p 80:80 --name webserver nginx` - Run with custom name
+  - `docker container run --rm -it centos:7 bash` - Interactive mode with auto-removal
+  - `docker container run -it -d -p 80:80 --name httpd httpd bash` - Custom port mapping
+
+  ### Container Lifecycle
+  - `docker container stop 69` - Stop container by ID
+  - `docker container stop webserver` - Stop container by name
+  - `docker container start mongo` - Start stopped container
+  - `docker container ls -a` - List all containers
+  - `docker container rm 654` - Remove container
+  - `docker container rm -f 667` - Force remove running container
+
+  ### Container Monitoring
+  - `docker logs <container_id>` - View container logs
+  - `docker ps` - List running processes
+  - `docker top <container_id>` - View processes inside container
+  - `docker container exec -it <mysql> bash` - Execute commands in running container
+
+  ## 🖼️ Image Operations
+  ### Image Management
+  - `docker images ls` - List images
+  - `docker history nginx:latest` - View image history and layers
+  - `docker rmi nginx:1.27.5` - Remove images
+  - `docker rmi $(docker images -f "dangling=true" -q)` - Remove dangling images
+  - `docker image prune` - Clean up unused images
+  - `docker image prune -a` - Remove all unused images
+  - `docker system prune -a --volumes -f` - System-wide cleanup
+
+  ### Image Tagging and Distribution
+  - `docker tag nginx:latest <your-dockerhub-id>/nginx:latest` - Tag images
+  - `docker tag nginx:latest <your-dockerhub-id>/nginx:testing` - Tag with different version
+  - `docker login` - Login to registry
+  - `docker push <your-dockerhub-id>/nginx:latest` - Push to registry
+  - `docker push <your-dockerhub-id>/nginx:testing` - Push tagged version
+
+  ## 💾 Volume Management
+  ### Volume Operations
+  - `docker volume ls` - List volumes
+  - `docker volume create my-volume` - Create volume
+  - `docker volume inspect my-volume` - Inspect volume
+  - `docker container run -d --name my-container -v my-volume:/data nginx` - Container with named volume
+  - `docker container run -d --name my-container -v $(pwd):/usr/share/nginx/html nginx` - Bind mount current directory
+  - `docker container run -d -p 80:4000 --name my-container -v $(pwd):/site bretfisher/jekyll-serve` - Jekyll development server
+
+  ## 🌍 Environment Variables
+  ### Runtime Environment Variables
+  #### Single Environment Variable
+  - `docker run -e NODE_ENV=production nginx` - Set single environment variable
+  - `docker run -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" myapp` - Set with value assignment
+  - `docker run -e HOST_IP myapp` - Set from host environment
+
+  #### Multiple Environment Variables
+  - `docker run -e NODE_ENV=production -e PORT=3000 -e DATABASE_URL="postgresql://user:pass@localhost:5432/mydb" myapp` - Multiple -e flags
+  - `docker run --env-file .env myapp` - Using environment file
+  - `docker run --env-file .env -e OVERRIDE_VAR=value myapp` - Combine both methods
+
+  ### Environment Files (.env)
+  #### Creating Environment Files
+  ```bash
+  # .env file example
+  NODE_ENV=production
+  PORT=3000
+  DATABASE_URL=postgresql://user:pass@localhost:5432/mydb
+  REDIS_URL=redis://localhost:6379
+  API_KEY=your-secret-api-key
+  DEBUG=false
+  ```
+
+  #### Using Environment Files
+  - `docker run --env-file .env myapp` - Load from default .env file
+  - `docker run --env-file .env.production myapp` - Load from specific file
+  - `docker run --env-file .env --env-file .env.local myapp` - Load multiple env files
+
+  ### Dockerfile Environment Variables
+  #### Setting Default Values
+  ```dockerfile
+  # Set environment variables with default values
+  ENV NODE_ENV=development
+  ENV PORT=3000
+  ENV LOG_LEVEL=info
+
+  # Multiple variables in one line
+  ENV NODE_ENV=development \
+      PORT=3000 \
+      LOG_LEVEL=info
+
+  # Using ARG for build-time variables
+  ARG BUILD_VERSION=latest
+  ENV APP_VERSION=$BUILD_VERSION
+  ```
+
+  ### Environment Variable Best Practices
+  - **Security**: Use environment files for secrets
+  - **Validation**: Validate required environment variables
+  - **Build vs Runtime**: Use ARG for build-time, ENV for runtime
+  - **Defaults**: Set sensible defaults in Dockerfile
+
+  ## 🏗️ Dockerfile Best Practices
+  ### Security-First Dockerfile
+  ```dockerfile
+  # Use minimal base image
+  FROM gcr.io/distroless/static-debian10
+
+  # Create non-root user
+  FROM alpine:3.12
+  RUN adduser -D myuser && chown -R myuser /myapp-data
+
+  # Switch to non-root user
+  USER myuser
+
+  # Set working directory
+  WORKDIR /app
+
+  # Use COPY instead of ADD
+  COPY requirements.txt .
+
+  # Combine RUN commands to reduce layers
+  RUN apk add --no-cache \
+      python3 \
+      py3-pip \
+      && pip3 install -r requirements.txt \
+      && rm -rf /var/cache/apk/*
+  ```
+
+  ### Multi-stage Build Example
+  ```dockerfile
+  # Build stage
+  FROM golang:1.19-alpine as builder
+  WORKDIR /app
+  COPY go.mod go.sum ./
+  RUN go mod download
+  COPY . .
+  RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+  # Final stage
+  FROM gcr.io/distroless/static-debian11
+  COPY --from=builder /app/main /
+  USER nonroot:nonroot
+  EXPOSE 8080
+  ENTRYPOINT ["/main"]
+  ```
+
+  ### Dockerfile Instructions Reference
+  #### Build-time Instructions
+  - `FROM ubuntu:20.04` - Base image
+  - `COPY src/ /app/` - Copy files
+  - `RUN apt-get update` - Execute commands
+  - `EXPOSE 8080` - Document port
+  - `ENV NODE_ENV=production` - Environment variable
+  - `WORKDIR /app` - Set working directory
+  - `ARG BUILD_VERSION` - Build argument
+
+  #### Runtime Instructions
+  - `CMD ["npm", "start"]` - Default command
+  - `ENTRYPOINT ["/app/start"]` - Fixed entry point
+  - `USER appuser` - Run as user
+  - `VOLUME ["/data"]` - Mount point
+
+  ### Optimization Techniques
+  - **Use .dockerignore** - Exclude unnecessary files
+  - **Order by change frequency** - Dockerfile instructions
+  - **Combine RUN commands** - Minimize layers
+  - **Use specific tags** - Not latest
+  - **Multi-stage builds** - Reduce final image size
+
+  ## 🌐 Network Configuration
+  ### Network Management
+  - `docker network ls` - List networks
+  - `docker network create my-network` - Create custom network
+  - `docker run -d --name web --network my-network nginx` - Run container in custom network
+  - `docker network connect my-network container_name` - Connect container to network
+  - `docker network inspect my-network` - Inspect network
+
+  ## 🔒 Security Best Practices
+  ### Rootless Containers
+  ```dockerfile
+  # Bad practice - running as root
+  FROM ubuntu:20.04
+  COPY app /app
+  CMD ["/app"]
+
+  # Good practice - non-root user
+  FROM ubuntu:20.04
+  RUN useradd -m -u 1000 appuser
+  COPY --chown=root:root app /app
+  RUN chmod 755 /app
+  USER appuser
+  CMD ["/app"]
+  ```
+
+  ### Secure Image Building
+  - `docker build --no-cache -t secure-app .` - Build with security context
+  - `docker scan secure-app` - Scan image for vulnerabilities
+  - `docker run --cap-drop=ALL --cap-add=NET_BIND_SERVICE app` - Run with limited capabilities
+  - `docker run --read-only --tmpfs /tmp app` - Run with read-only filesystem
+
+  ### Content Trust
+  - `export DOCKER_CONTENT_TRUST=1` - Enable Docker Content Trust
+  - `docker push myregistry/myapp:latest` - Sign and push image
+  - `docker pull myregistry/myapp:latest` - Pull with signature verification
+
+  ## 🚀 Advanced Operations
+  ### Docker Compose Integration
+  ```yaml
+  # docker-compose.yml
+  version: '3.8'
+  services:
+    web:
+      build: .
+      ports:
+        - "80:8080"
+      volumes:
+        - .:/app
+      environment:
+        - NODE_ENV=development
+      user: "1000:1000"
+      read_only: true
+      tmpfs:
+        - /tmp
+  ```
+
+  ### Health Checks
+  - `docker run -d --name healthy-app --health-cmd="curl -f http://localhost:8080/health || exit 1" --health-interval=30s --health-timeout=10s --health-retries=3 myapp:latest` - Container with health check
+
+  ### Resource Limits
+  - `docker run -d --name limited-app --memory=512m --cpus=1.5 --restart=unless-stopped myapp:latest` - Run with resource constraints
+
+  ### Debugging Commands
+  - `docker exec -it container_name /bin/sh` - Debug running container
+  - `docker cp container_name:/app/logs ./logs` - Copy files from container
+  - `docker stats container_name` - View container resource usage
+  - `docker inspect container_name` - Inspect container configuration
+
+  ## 📝 Best Practices Summary
+  ### Image Optimization
+  - ✅ Use multi-stage builds to reduce image size
+  - ✅ Choose minimal base images (distroless, alpine)
+  - ✅ Combine RUN commands to minimize layers
+  - ✅ Use .dockerignore to exclude unnecessary files
+
+  ### Security
+  - ✅ Never run containers as root
+  - ✅ Scan images for vulnerabilities
+  - ✅ Use specific image tags, not latest
+  - ✅ Keep base images updated
+  - ✅ Enable Docker Content Trust
+
+  ### Performance
+  - ✅ Order Dockerfile instructions by change frequency
+  - ✅ Use build cache effectively
+  - ✅ Minimize build context size
+  - ✅ Use appropriate restart policies
+
+  ### Monitoring
+  - ✅ Implement health checks
+  - ✅ Use structured logging
+  - ✅ Monitor resource usage
+  - ✅ Set up proper log rotation
+
+  ## 🔗 Common Patterns
+  ### Development Workflow
+  ```bash
+  # Development setup
+  docker build -t myapp:dev .
+  docker run -d -p 3000:3000 -v $(pwd):/app --name dev-container myapp:dev
+
+  # Production deployment
+  docker build -t myapp:prod --target production .
+  docker run -d -p 80:8080 --restart=always --name prod-container myapp:prod
+  ```
+
+  ### Docker AI (Experimental)
+  - `docker ai "How do I expose port 3000 in my Dockerfile?"` - AI-powered CLI assistance
+  - **Requirements**: Docker Desktop v4.27+, Docker account login required
+---

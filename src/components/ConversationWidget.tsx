@@ -44,9 +44,9 @@ const ConversationWidget: React.FC = () => {
 
   return (
     <div
-      className={`fixed top-20 right-4 z-50 transition-all duration-300 ease-in-out
+      className={`fixed  top-20 right-4 z-50 transition-all duration-300 ease-in-out
         rounded-xl shadow-2xl
-        ${isExpanded ? 'bg-gray-300 w-80 p-3 opacity-100 scale-100 text-[#13182D]' : 'bg-[#13182D] w-64 p-3 opacity-90 scale-95 text-white'}
+        ${isExpanded ? 'bg-gray-300 w-80 p-3 opacity-100 scale-100 text-[#13182D]' : 'bg-[#13182D] md:w-64 w-12 md:p-3 p-2 opacity-90 scale-95 text-white'}
         overflow-hidden`}
     >
       {isExpanded && (
@@ -131,7 +131,7 @@ const ConversationWidget: React.FC = () => {
       {/* Collapsed State */}
       {!isExpanded && (
         <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 md:flex hidden">
             <img
               src={Agent}
               alt="Agent Avatar"
@@ -141,10 +141,10 @@ const ConversationWidget: React.FC = () => {
           </div>
           <button
             onClick={toggleExpanded}
-            className="flex items-center gap-1 px-3 py-1 rounded-full bg-[#E5E5E5] text-[#2C1D24] text-sm hover:bg-gray-300 transition"
+            className="flex items-center justify-center md:gap-1 gap-0 md:px-3 px-2 md:py-1 py-2 rounded-full bg-[#E5E5E5] text-[#2C1D24] text-sm hover:bg-gray-300 transition"
           >
             <FiPhone className="text-base" />
-            Ask anything
+            <span className="hidden md:inline ml-1">Ask anything</span>
           </button>
         </div>
       )}

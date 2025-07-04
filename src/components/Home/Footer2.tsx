@@ -103,25 +103,24 @@ const Footer: React.FC = () => {
         {/* Top Menu */}
         <div className="flex justify-center space-x-10 mb-1">
           {[
-              { name: 'Docker CLI Guide', url: '/portfolio/docs/docker-cli-guid' },
-              { name: 'Shell Scripting for DevOps', url: '/portfolio/docs/shell-script-devops' },
-              { name: 'Tools Database', url: '/tools' },
-              { name: '2024 Survey', url: '/survey-2024' },
+              { name: 'Docker CLI Guide', url: '/docs/docker-cli-guid' },
+              { name: 'Shell Scripting for DevOps', url: '/docs/shell-script-devops' },
+              { name: 'Contributing to a GitHub Project', url: '/docs/guid-github' },
             ].map((item, idx) => (
-            <a
+            <Link
               key={idx}
-              href={item.url}
+              to={item.url}
               className="hover:text-white transition-colors duration-200"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
 
         {/* Magnetic Dots Grid */}
         <div className="relative mb-10 h-80 overflow-hidden">
-          <div className="grid grid-cols-80 gap-1 place-items-center absolute inset-0 p-4">
-            {Array.from({ length: 800 }).map((_, i) => (
+          <div className="grid grid-cols-30 gap-1 place-items-center absolute inset-0 p-4">
+            {Array.from({ length: 300 }).map((_, i) => (
               <div
                 key={i}
                 ref={(el) => { dotsRef.current[i] = el; }}
@@ -135,10 +134,10 @@ const Footer: React.FC = () => {
         {/* Lower Nav */}
         <div className="flex flex-wrap justify-between items-center text-gray-500 border-t border-gray-700 pt-6">
           <div className="flex flex-wrap space-x-4 mb-2 sm:mb-0">
-            {['About', 'Newsletter', 'Community', 'Media Kit', 'Privacy & Terms'].map((item, idx) => (
-              <a key={idx} href="#" className="hover:text-white transition-colors duration-200">
+            {['React', 'Redux', 'Express', 'Docker', 'Kubernates'].map((item, idx) => (
+              <Link key={idx} to="#" className="hover:text-white transition-colors duration-200">
                 {item}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="flex space-x-4">
