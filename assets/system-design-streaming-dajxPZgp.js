@@ -1,4 +1,4 @@
-import{u as s,j as n}from"./index-DchHdfwn.js";import"./mermaid-Dh5kuZkf.js";const l={title:"🎬 Streaming Platform System Design Interview",date:"2025-06-07",tags:["System-Design","Streaming","Netflix"]};function i(r){const e={code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s(),...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Interview Question"}),`
+import{u as s,j as n}from"./index-BfRheuJw.js";import"./mermaid-Dh5kuZkf.js";const l={title:"🎬 Streaming Platform System Design Interview",date:"2025-06-07",tags:["System-Design","Streaming","Netflix"]};function i(r){const e={code:"code",h2:"h2",h3:"h3",hr:"hr",li:"li",ol:"ol",p:"p",pre:"pre",strong:"strong",ul:"ul",...s(),...r.components};return n.jsxs(n.Fragment,{children:[n.jsx(e.h2,{children:"Interview Question"}),`
 `,n.jsx(e.p,{children:n.jsx(e.strong,{children:"Design a video streaming platform like Netflix that can serve millions of users worldwide with high availability, low latency, and personalized content recommendations."})}),`
 `,n.jsx(e.hr,{}),`
 `,n.jsx(e.h2,{children:"1. Requirements Clarification"}),`
