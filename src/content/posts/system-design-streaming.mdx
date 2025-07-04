@@ -57,27 +57,27 @@ tags: [System-Design, Streaming, Netflix]
 ## 3. System Architecture
 
 ```mermaid
-graph TB
-    subgraph "Client Layer"
+flowchart TB
+    subgraph Client["Client Layer"]
         A[Web App] 
         B[Mobile App]
         C[Smart TV]
         D[Gaming Console]
     end
     
-    subgraph "CDN Layer"
+    subgraph CDN["CDN Layer"]
         E[Global CDN]
         F[Edge Servers]
         G[Regional Cache]
     end
     
-    subgraph "API Gateway"
+    subgraph Gateway["API Gateway"]
         H[Load Balancer]
         I[API Gateway]
         J[Rate Limiter]
     end
     
-    subgraph "Microservices"
+    subgraph Services["Microservices"]
         K[User Service]
         L[Content Service]
         M[Recommendation Service]
@@ -87,7 +87,7 @@ graph TB
         Q[Notification Service]
     end
     
-    subgraph "Data Layer"
+    subgraph Data["Data Layer"]
         R[User Database]
         S[Content Database]
         T[Analytics Database]
@@ -95,13 +95,13 @@ graph TB
         V[Cache Layer]
     end
     
-    subgraph "Storage Layer"
+    subgraph Storage["Storage Layer"]
         W[Video Storage]
         X[Image Storage]
         Y[Backup Storage]
     end
     
-    subgraph "External Services"
+    subgraph External["External Services"]
         Z[Payment Gateway]
         AA[Email Service]
         BB[Push Notification]
@@ -345,7 +345,7 @@ erDiagram
 ### 5.1 Content Delivery Network (CDN)
 
 ```mermaid
-graph LR
+flowchart LR
     A[User Request] --> B[CDN Edge Server]
     B --> C{Content Available?}
     C -->|Yes| D[Serve from Edge]

@@ -7,7 +7,7 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: 'https://codingdud.github.io/portfolio/',
+  base: '/portfolio/',
   plugins: [
     tailwindcss(),
     react(),
