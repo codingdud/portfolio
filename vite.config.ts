@@ -18,7 +18,12 @@ export default defineConfig({
   ],
   // Add this 'build' object
   build: {
-    // Increase the limit to, for example, 1000KB (1MB)
-    chunkSizeWarningLimit: 1000, 
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      external: [],
+      output: {
+        inlineDynamicImports: true
+      }
+    }
   },
 })
