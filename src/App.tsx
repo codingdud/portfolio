@@ -11,17 +11,17 @@ import MindMapPage from './pages/MindMapPage';
 
 function App() {
   return (
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-          <Route path="/docs/" element={<Docs />} />
-          <Route path="/docs/:slug" element={<DocPost />} />
-          <Route path="/mindmaps" element={<MindMapList />} />
-        </Route>
-        <Route path="/mindmap/:id" element={<MindMapPage />} />
-      </Routes>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPost />} />
+        <Route path="/docs/" element={<Docs />} />
+        <Route path="/docs/:slug" element={<DocPost />} />
+        <Route path="/mindmaps" element={<MindMapList />} />
+      </Route>
+      <Route path="/mindmap/:id" element={<MindMapPage />} />
+    </Routes>
   );
 }
 

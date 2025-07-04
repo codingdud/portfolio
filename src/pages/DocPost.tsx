@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams,useNavigate } from 'react-router-dom';
 import { FiArrowLeft,FiArrowUp } from 'react-icons/fi';
-
+import { MDXProvider } from '@mdx-js/react';
+import { mdxComponents } from '../components/MDXComponents';
 import gsap from 'gsap';
 
 function DocPost() {
@@ -46,7 +47,9 @@ function DocPost() {
       </button>
       <article className="doc-content prose prose-invert max-w-none">
         <h1>{frontmatter.title}</h1>
-        <DocComponent />
+        <MDXProvider components={mdxComponents}>
+          <DocComponent />
+        </MDXProvider>
       </article>
       
 

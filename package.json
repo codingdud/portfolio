@@ -32,6 +32,7 @@
     "react-router-dom": "^7.6.1",
     "remark-frontmatter": "^5.0.0",
     "remark-mdx-frontmatter": "^5.1.0",
+    "remark-mermaid": "^0.2.0",
     "three": "^0.177.0"
   },
   "devDependencies": {

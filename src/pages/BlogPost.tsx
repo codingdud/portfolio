@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FiArrowLeft,FiArrowUp } from 'react-icons/fi';
-
+import { MDXProvider } from '@mdx-js/react';
+import { mdxComponents } from '../components/MDXComponents';
 import gsap from 'gsap';
 
 function BlogPost() {
@@ -54,7 +55,9 @@ function BlogPost() {
             </span>
           ))}
         </div>
-        <PostComponent />
+        <MDXProvider components={mdxComponents}>
+          <PostComponent />
+        </MDXProvider>
       </article>
       {/* Scroll to Top Button (Bottom Right) */}
       <button
