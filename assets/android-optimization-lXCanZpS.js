@@ -1,4 +1,4 @@
-import{u as t,j as e}from"./index-BfRheuJw.js";import"./mermaid-Dh5kuZkf.js";const d={title:"Android Optimization Techniques",date:"2025-01-15",tags:["android","performance"]};function r(i){const n={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...t(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h1,{children:"Android Optimization Techniques"}),`
+import{u as t,j as e}from"./index-BTbyQpxy.js";import"./mermaid-z7jFjprN.js";const d={title:"Android Optimization Techniques",date:"2025-01-15",tags:["android","performance"]};function r(i){const n={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...t(),...i.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.h1,{children:"Android Optimization Techniques"}),`
 `,e.jsx(n.p,{children:"Learn how to optimize Android applications for better performance."}),`
 `,e.jsx(n.h2,{children:"Memory Management"}),`
 `,e.jsxs(n.ul,{children:[`
