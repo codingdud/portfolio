@@ -34,8 +34,9 @@ export default function Mermaid({ chart }: MermaidProps) {
         const { svg } = await mermaid.render('mermaid-' + Date.now(), chart);
         chartRef.current.innerHTML = svg;
       } catch (error) {
-        console.error('Mermaid error:', error);
-        chartRef.current.innerHTML = `<pre style="color: red;">Mermaid Error: ${error}</pre>`;
+        console.error('Mermaid syntax error in chart:', chart.substring(0, 100));
+        console.error('Full error:', error);
+        chartRef.current.innerHTML = `<div style="color: red; background: #2d1b1b; padding: 1rem; border-radius: 4px; font-family: monospace;"><strong>Mermaid Syntax Error:</strong><br/>${error}<br/><br/><strong>Chart preview:</strong><br/><pre style="font-size: 12px; overflow: auto;">${chart.substring(0, 200)}...</pre></div>`;
       }
     };
     
