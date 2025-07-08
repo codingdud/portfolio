@@ -9,14 +9,14 @@ export default function Mermaid({ chart }: MermaidProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    
     const renderChart = async () => {
-      if (!chartRef.current || !chart) return;
+      if (!chartRef.current || !chart.trim()) return;
       
       try {
         mermaid.initialize({
           startOnLoad: false,
           theme: 'dark',
+          securityLevel: 'sandbox',
           themeVariables: {
             darkMode: true,
             primaryColor: '#3b82f6',
@@ -31,12 +31,12 @@ export default function Mermaid({ chart }: MermaidProps) {
           },
         });
         
-        const { svg } = await mermaid.render('mermaid-' + Date.now(), chart);
+        const cleanChart = chart.trim();
+        const { svg } = await mermaid.render('mermaid-' + Date.now(), cleanChart);
         chartRef.current.innerHTML = svg;
       } catch (error) {
-        console.error('Mermaid syntax error in chart:', chart.substring(0, 100));
-        console.error('Full error:', error);
-        chartRef.current.innerHTML = `<div style="color: red; background: #2d1b1b; padding: 1rem; border-radius: 4px; font-family: monospace;"><strong>Mermaid Syntax Error:</strong><br/>${error}<br/><br/><strong>Chart preview:</strong><br/><pre style="font-size: 12px; overflow: auto;">${chart.substring(0, 200)}...</pre></div>`;
+        console.error('Mermaid error:', error);
+        chartRef.current.innerHTML = `<div style="color: red; background: #2d1b1b; padding: 1rem; border-radius: 4px; font-family: monospace;"><strong>Mermaid Error:</strong><br/>${error}<br/><br/><strong>Chart:</strong><br/><pre style="font-size: 12px;">${chart}</pre></div>`;
       }
     };
     
