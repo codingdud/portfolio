@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useConversation } from '@elevenlabs/react';
 import { FiPhone, FiChevronUp } from 'react-icons/fi';
-import Agent from "../../public/Vector.png"
+import Agent from "/Vector.png"
 
 const agentId = import.meta.env.VITE_ELEVEN_LABS_AGENT_ID;
 

@@ -59,6 +59,7 @@
 .prose pre {
   @apply bg-gray-900 border border-gray-700 rounded-lg overflow-x-auto my-6 shadow-xl;
   background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  white-space: pre !important;
 }
 
 .prose pre code {
@@ -67,6 +68,8 @@
   border: none !important;
   border-radius: 0 !important;
   font-size: 0.875rem;
+  white-space: pre !important;
+  display: block !important;
 }
 
 /* Language label for code blocks */
