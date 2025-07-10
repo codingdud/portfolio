@@ -1,29 +1,44 @@
 import React, { useState } from 'react';
 import { useConversation } from '@elevenlabs/react';
-import { FiPhone, FiChevronUp } from 'react-icons/fi';
+import { FiPhone, FiChevronUp, FiMic, FiMicOff, FiVolume2 } from 'react-icons/fi';
 import Agent from "/Vector.png"
 
 const agentId = import.meta.env.VITE_ELEVEN_LABS_AGENT_ID;
 
 const ConversationWidget: React.FC = () => {
-  const [transcript, setTranscript] = useState<string[]>([]);
+  const [transcript, setTranscript] = useState<{type: 'user' | 'agent' | 'system', message: string}[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [input, setInput] = useState<string>('');
 
   const conversation = useConversation({
-    onConnect: () => setTranscript((prev) => [...prev, 'Connected!']),
-    onDisconnect: () => setTranscript((prev) => [...prev, 'Disconnected.']),
-    onMessage: (msg) => {
-      if (msg.message) setTranscript((prev) => [...prev, msg.message]);
+    onConnect: () => {
+      console.log('Connected to agent');
+      setTranscript((prev) => [...prev, {type: 'system', message: 'Connected! You can now speak or type messages to interact with the AI agent.'}]);
     },
-    onError: (err: any) => setError(typeof err === 'string' ? err : err?.message || 'Unknown error'),
+    onDisconnect: () => {
+      console.log('Disconnected from agent');
+      setTranscript((prev) => [...prev, {type: 'system', message: 'Disconnected.'}]);
+    },
+    onMessage: (msg) => {
+      console.log('Received message from agent:', msg);
+      if (msg.message) {
+        setTranscript((prev) => [...prev, {type: 'agent', message: msg.message}]);
+      }
+    },
+    onError: (err: any) => {
+      console.error('Conversation error:', err);
+      setError(typeof err === 'string' ? err : err?.message || 'Unknown error');
+    },
   });
 
   const start = async () => {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      await conversation.startSession({ agentId });
+      await conversation.startSession({ 
+        agentId,
+        connectionType: 'webrtc'
+      });
     } catch (err: any) {
       setError(err.message || 'Microphone access denied');
     }
@@ -35,11 +50,26 @@ const ConversationWidget: React.FC = () => {
 
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
-  const sendChat = () => {
+  const sendChat = async () => {
     if (!input.trim()) return;
-    setTranscript((prev) => [...prev, `You: ${input}`]);
+    const userMessage = input;
+    setTranscript((prev) => [...prev, {type: 'user', message: userMessage}]);
     setInput('');
-    // Send to backend or AI if needed
+    
+    // Send text message to ElevenLabs agent
+    if (conversation.status === 'connected' && conversation.sendUserMessage) {
+      try {
+        await conversation.sendUserMessage(userMessage);
+      } catch (err) {
+        console.error('Failed to send text message:', err);
+        setError('Failed to send message');
+      }
+    } else {
+      // Fallback when not connected
+      setTimeout(() => {
+        setTranscript((prev) => [...prev, {type: 'agent', message: 'Please start a voice call to enable full AI interaction. I can respond to both voice and text when connected!'}]);
+      }, 500);
+    }
   };
 
   return (
@@ -83,27 +113,64 @@ const ConversationWidget: React.FC = () => {
               className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm 
                 rounded-lg text-white bg-black hover:bg-gray-800 transition"
             >
-              <FiPhone className="text-lg" />
+              {conversation.status === 'connected' ? (
+                <FiMicOff className="text-lg animate-pulse" />
+              ) : (
+                <FiMic className="text-lg" />
+              )}
               {conversation.status === 'connected' ? 'End Call' : 'Start a Call'}
             </button>
 
-            <div className="text-xs text-left">
-              Status:{' '}
-              <span
-                className={`${
-                  conversation.status === 'connected' ? 'text-green-600' : 'text-red-500'
-                }`}
-              >
-                {conversation.status}
-              </span>
-              {conversation.isSpeaking && <span className="ml-2 text-blue-500">Speaking...</span>}
+            <div className="text-xs text-left flex items-center gap-3">
+              <div>
+                Status:{' '}
+                <span
+                  className={`${
+                    conversation.status === 'connected' ? 'text-green-600' : 'text-red-500'
+                  }`}
+                >
+                  {conversation.status}
+                </span>
+              </div>
+              {conversation.isSpeaking && (
+                <div className="text-green-500 flex items-center gap-1">
+                  <FiVolume2 className="animate-pulse" />
+                  Speaking
+                </div>
+              )}
+              {conversation.status === 'connected' && !conversation.isSpeaking && (
+                <div className="text-blue-500 flex items-center gap-1">
+                  <FiMic className="animate-pulse" />
+                  Listening
+                </div>
+              )}
             </div>
 
             {error && <div className="text-red-500 text-xs">{error}</div>}
 
-            <div className="bg-gray-100 rounded p-2 h-32 overflow-y-auto text-xs text-left text-[#13182D]">
-              {transcript.map((line, i) => (
-                <div key={i}>{line}</div>
+            <div className="bg-gray-100 rounded p-2 h-32 overflow-y-auto text-xs text-left text-[#13182D] space-y-1">
+              {transcript.map((item, i) => (
+                <div key={i} className={`flex gap-2 ${
+                  item.type === 'user' ? 'justify-end' : 'justify-start'
+                }`}>
+                  {item.type === 'agent' && (
+                    <img src={Agent} alt="Agent" className="w-4 h-4 rounded-full mt-0.5 flex-shrink-0" />
+                  )}
+                  <div className={`max-w-[80%] px-2 py-1 rounded text-xs ${
+                    item.type === 'user' 
+                      ? 'bg-blue-500 text-white rounded-br-none' 
+                      : item.type === 'agent'
+                      ? 'bg-white border rounded-bl-none'
+                      : 'bg-gray-200 text-gray-600 text-center w-full'
+                  }`}>
+                    {item.message}
+                  </div>
+                  {item.type === 'user' && (
+                    <div className="w-4 h-4 bg-blue-500 rounded-full mt-0.5 flex-shrink-0 text-white text-[8px] flex items-center justify-center font-bold">
+                      U
+                    </div>
+                  )}
+                </div>
               ))}
             </div>
 
