@@ -12,6 +12,7 @@ import formeassy from '../../assets/project_image/formeassy.png';
 import photoflow from '../../assets/project_image/photoflow.png';
 import photoseekai from '../../assets/project_image/photoseekai.png';
 import feedback from '../../assets/project_image/feedback.png';
+import uilibexp from '../../assets/project_image/uilibexp.png';
 
 
 
@@ -31,6 +32,16 @@ type Project = {
 };
 
 const projects: Project[] = [
+  {
+    title: "React UI Library Picker",
+    date: "August 2025",
+    description: "A modern, responsive web application for discovering and comparing React UI component libraries. Built with React, TypeScript, and Tailwind CSS.",
+    tags: ["React", "Tailwind", "radix-ui", "Framer Motion"],
+    color: "orange",
+    github: "https://github.com/GoodCode-Society/ui-library-explorer",
+    live: "https://ui-library-explorer.vercel.app/",
+    image: uilibexp
+  },
   {
     title: "WebGen",
     date: "January 2025",

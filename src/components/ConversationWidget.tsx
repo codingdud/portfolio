@@ -36,8 +36,7 @@ const ConversationWidget: React.FC = () => {
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await conversation.startSession({ 
-        agentId,
-        connectionType: 'webrtc'
+        agentId
       });
     } catch (err: any) {
       setError(err.message || 'Microphone access denied');
