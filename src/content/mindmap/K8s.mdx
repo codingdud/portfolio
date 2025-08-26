@@ -1,0 +1,283 @@
+---
+title: "Kubernetes Complete Mind Map"
+icon: AiOutlineKubernetes
+markmap:
+  colorFreezeLevel: 3
+image: "https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/what-is-kubernetes_kubernetes-community?resMode=sharp2&op_usm=1.5,0.65,15,0&wid=1062&hei=620&qlt=100&fit=constrain"
+raw: |
+    # Kubernetes Complete Guide <!-- markmap: foldAll -->
+
+    ## CLI Essentials
+    ### kubectl Syntax
+    - `kubectl [command] [TYPE] [NAME] [flags]`
+    - Basic structure for all operations
+
+    ### Daily Commands
+    - **Get Info**
+    - `kubectl get nodes` - List cluster nodes
+    - `kubectl get pods` - List pods
+    - `kubectl get all` - Overview of resources
+    - `kubectl cluster-info` - Cluster status
+    - **Create Resources**
+    - `kubectl run <name> --image=<image>` - Create pod
+    - `kubectl create deployment <name> --image=<image>` - Create deployment
+    - `kubectl apply -f <file.yaml>` - Apply configuration
+    - **Debug & Troubleshoot**
+    - `kubectl logs <pod-name>` - View logs
+    - `kubectl describe <resource> <name>` - Detailed info
+    - `kubectl exec -it <pod> -- bash` - Shell access
+    - `kubectl port-forward <pod> 8080:80` - Port forwarding
+
+    ## Resource Shortcuts
+    ### Core Resources
+    - **pod** → `po`
+    - **service** → `svc`
+    - **deployment** → `deploy`
+    - **replicaset** → `rs`
+    - **namespace** → `ns`
+    - **node** → `no`
+    - **persistentvolume** → `pv`
+    - **persistentvolumeclaim** → `pvc`
+    - **configmap** → `cm`
+    - **secret** → No shortcut
+    - **serviceaccount** → `sa`
+
+    ### Extended Resources
+    - **ingress** → `ing`
+    - **networkpolicy** → `netpol`
+    - **horizontalpodautoscaler** → `hpa`
+    - **verticalpodautoscaler** → `vpa`
+    - **cronjob** → `cj`
+    - **job** → No shortcut
+    - **daemonset** → `ds`
+    - **statefulset** → `sts`
+
+    ## Core Concepts
+    ### Pods
+    - **Definition**: Smallest deployable unit
+    - **Features**
+    - One or more containers
+    - Shared network and storage
+    - Ephemeral by design
+    - **Commands**
+    - `kubectl get po` - List pods
+    - `kubectl describe po <name>` - Pod details
+    - `kubectl logs po/<name>` - Pod logs
+    - `kubectl delete po <name>` - Delete pod
+
+    ### Deployments
+    - **Purpose**: Manage pod lifecycles
+    - **Features**
+    - Rolling updates
+    - Rollback capabilities
+    - Replica management
+    - Self-healing
+    - **Commands**
+    - `kubectl create deploy <name> --image=<image>`
+    - `kubectl scale deploy <name> --replicas=3`
+    - `kubectl set image deploy/<name> <container>=<image>`
+    - `kubectl rollout undo deploy/<name>`
+
+    ### Services
+    - **Types**
+    - **ClusterIP**: Internal cluster access
+    - **NodePort**: External access (30000-32767)
+    - **LoadBalancer**: Cloud provider LB
+    - **ExternalName**: DNS mapping
+    - **Commands**
+    - `kubectl expose deploy <name> --port=80 --type=ClusterIP`
+    - `kubectl get svc` - List services
+    - `kubectl get endpoints` - Service endpoints
+
+    ### Storage
+    - **PersistentVolume (pv)**
+    - Cluster-wide storage resource
+    - Independent of pod lifecycle
+    - **PersistentVolumeClaim (pvc)**
+    - Request for storage
+    - Binds to PV
+    - **StorageClass**
+    - Dynamic provisioning
+    - Storage templates
+
+    ### Configuration
+    - **ConfigMaps (cm)**
+    - Non-sensitive configuration
+    - Key-value pairs or files
+    - `kubectl create cm <name> --from-literal=key=value`
+    - **Secrets**
+    - Sensitive data (passwords, tokens)
+    - Base64 encoded
+    - `kubectl create secret generic <name> --from-literal=key=value`
+
+    ## Networking
+    ### Service Discovery
+    - **DNS Resolution**
+    - `<service>.<namespace>.svc.cluster.local`
+    - Short form: `<service>` (same namespace)
+    - **Environment Variables**
+    - Automatic injection
+    - SERVICE_HOST and SERVICE_PORT
+
+    ### Ingress
+    - **Purpose**: HTTP/HTTPS routing
+    - **Features**
+    - Path-based routing
+    - Host-based routing
+    - SSL termination
+    - **Controllers**
+    - NGINX Ingress Controller
+    - Traefik
+    - Cloud provider specific
+
+    ### Network Policies
+    - **Default**: Allow all traffic
+    - **Policies**
+    - Ingress rules
+    - Egress rules
+    - Pod selectors
+
+    ## Advanced Topics
+    ### Autoscaling
+    - **HPA (Horizontal Pod Autoscaler)**
+    - Scale pods based on metrics
+    - CPU, memory, custom metrics
+    - **VPA (Vertical Pod Autoscaler)**
+    - Adjust resource requests/limits
+    - Right-sizing containers
+    - **Cluster Autoscaler**
+    - Scale nodes based on demand
+
+    ### Security
+    - **RBAC (Role-Based Access Control)**
+    - Users, groups, service accounts
+    - Roles and cluster roles
+    - Role bindings
+    - **Pod Security**
+    - Security contexts
+    - Non-root users
+    - Read-only filesystems
+    - Capability dropping
+    - **Network Security**
+    - Network policies
+    - Service mesh (Istio, Linkerd)
+
+    ### Monitoring & Observability
+    - **Metrics**
+    - Prometheus + Grafana
+    - Metrics server
+    - `kubectl top nodes/pods`
+    - **Logging**
+    - ELK Stack (Elasticsearch, Logstash, Kibana)
+    - Fluentd/Fluent Bit
+    - Centralized logging
+    - **Tracing**
+    - Jaeger
+    - Zipkin
+    - OpenTelemetry
+
+    ## Package Management
+    ### Helm
+    - **Purpose**: Kubernetes package manager
+    - **Components**
+    - Charts (packages)
+    - Releases (installations)
+    - Repositories
+    - **Commands**
+    - `helm install <name> <chart>`
+    - `helm upgrade <name> <chart>`
+    - `helm list` - List releases
+    - `helm uninstall <name>`
+
+    ### Kustomize
+    - **Purpose**: Configuration management
+    - **Features**
+    - Base and overlay structure
+    - Environment-specific configs
+    - Built into kubectl
+    - **Usage**
+    - `kubectl apply -k <directory>`
+    - Base + overlays pattern
+
+    ## GitOps
+    ### ArgoCD
+    - **Purpose**: Continuous delivery
+    - **Features**
+    - Git as source of truth
+    - Automated sync
+    - Web UI
+    - **Workflow**
+    - Git commit → ArgoCD sync → K8s deployment
+
+    ### Flux
+    - **Purpose**: GitOps operator
+    - **Features**
+    - Git → Cluster synchronization
+    - Helm integration
+    - Image automation
+
+    ## Troubleshooting
+    ### Common Issues
+    - **Pod States**
+    - Pending: Resource constraints, scheduling issues
+    - CrashLoopBackOff: Application crashes
+    - ImagePullBackOff: Image not found
+    - Running: Normal state
+    - **Debugging Tools**
+    - `kubectl describe` - Detailed information
+    - `kubectl logs` - Container logs
+    - `kubectl exec` - Shell access
+    - `kubectl get events` - Cluster events
+
+    ### Debug Commands
+    - **Network Debug**
+    - `kubectl run debug --image=nicolaka/netshoot --rm -it`
+    - DNS: `nslookup <service>`
+    - Connectivity: `curl <service>:<port>`
+    - **Resource Usage**
+    - `kubectl top nodes` - Node resource usage
+    - `kubectl top pods` - Pod resource usage
+    - `kubectl describe nodes` - Node capacity
+
+    ## Best Practices
+    ### Resource Management
+    - **Always set resource requests/limits**
+    - **Use health checks**
+    - Liveness probes
+    - Readiness probes
+    - Startup probes
+    - **Security hardening**
+    - Non-root containers
+    - Read-only filesystems
+    - Minimal capabilities
+
+    ### Configuration
+    - **Use ConfigMaps for configuration**
+    - **Use Secrets for sensitive data**
+    - **Environment-specific overlays**
+    - **Version your configurations**
+
+    ### Deployment
+    - **Rolling updates**
+    - **Blue-green deployments**
+    - **Canary releases**
+    - **Automated rollback**
+
+    ## Emergency Procedures
+    ### Emergency Commands
+    - `kubectl delete po <name> --force --grace-period=0`
+    - `kubectl drain <node> --ignore-daemonsets`
+    - `kubectl cordon <node>` - Prevent scheduling
+    - `kubectl uncordon <node>` - Allow scheduling
+
+    ### Backup & Recovery
+    - **Velero**: Cluster backup tool
+    - **ETCD snapshots**: Control plane backup
+    - **Persistent volume snapshots**
+
+    ### Disaster Recovery
+    - **Multi-region clusters**
+    - **Cross-cluster replication**
+    - **Backup strategies**
+    - **Recovery procedures**
+---

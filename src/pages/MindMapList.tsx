@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as FiIcons from 'react-icons/fi';
+import * as FiIcons from 'react-icons/ai';
 import { FiAlertCircle, FiMap } from 'react-icons/fi';
 import SearchBar from '../components/SearchBar';
 import * as FaIcons from 'react-icons/fa';
