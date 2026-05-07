@@ -26,9 +26,6 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
-
       - name: Install gh-pages
         run: npm install --no-save gh-pages
 
