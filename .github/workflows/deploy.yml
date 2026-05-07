@@ -26,8 +26,8 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install gh-pages
-        run: npm install --no-save gh-pages
+      - name: Install dependencies
+        run: npm install
 
       - name: Build
         run: npm run build
@@ -37,6 +37,6 @@ jobs:
           VITE_PUBLIC_POSTHOG_HOST: ${{ secrets.VITE_PUBLIC_POSTHOG_HOST }}
 
       - name: Deploy to GitHub Pages
-        run: npm run deploy -- -u "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+        run: npm run deploy -- -u "GitHub Actions <actions@github.com>"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
