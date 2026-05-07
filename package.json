@@ -25,6 +25,7 @@
     "markmap-view": "^0.18.12",
     "mermaid": "^11.8.0",
     "postcss": "^8.5.4",
+    "posthog-js": "^1.372.9",
     "prismjs": "^1.30.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

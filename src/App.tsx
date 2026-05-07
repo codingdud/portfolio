@@ -1,4 +1,6 @@
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import posthog from 'posthog-js';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Blog from './pages/Blog';
@@ -11,6 +13,12 @@ import NotFound from './pages/NotFound';
 
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    posthog.capture('$pageview');
+  }, [location]);
+
   return (
     <Routes>
       <Route element={<Layout />}>
