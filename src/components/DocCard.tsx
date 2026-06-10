@@ -14,7 +14,7 @@ function DocCard({ doc }: DocCardProps) {
       <h2 className="text-ink text-xl font-semibold mb-2">{doc.frontmatter.title}</h2>
       <p className="text-ink-muted text-sm mb-3">{doc.frontmatter.date}</p>
       <div className="flex flex-wrap gap-2">
-        {doc.frontmatter.tags.map((tag: string) => (
+        {doc.frontmatter.tags?.map((tag: string) => (
           <span
             key={tag}
             className="bg-surface-2 text-ink text-xs px-3 py-1 rounded-pill"

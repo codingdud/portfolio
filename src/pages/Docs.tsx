@@ -22,7 +22,7 @@ export interface Doc {
 const iconFor = (frontmatter: Doc['frontmatter']): { Icon: IconType; color: string } => {
   const color = frontmatter.iconColor || '#999999';
   if (frontmatter.icon) {
-    const Icon = (SiIcons as Record<string, IconType>)[frontmatter.icon];
+    const Icon = (SiIcons as Record<string, IconType | undefined>)[frontmatter.icon];
     if (Icon) return { Icon, color };
   }
   return { Icon: FiFileText, color };
