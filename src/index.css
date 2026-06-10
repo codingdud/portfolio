@@ -1,73 +1,215 @@
 @import "tailwindcss";
 
-/* Base prose styles */
-.prose {
-  @apply text-gray-300 leading-relaxed;
-  max-width: none;
+/* =============================================
+   DESIGN SYSTEM TOKENS (Tailwind v4 @theme)
+   ============================================= */
+
+@theme {
+  /* Colors */
+  --color-canvas: #0A0A0B;
+  --color-surface-1: #1A1A1F;
+  --color-surface-2: #2A2A30;
+  --color-ink: #FFFFFF;
+  --color-ink-muted: #999999;
+  --color-accent: #0099FF;
+  --color-hairline: rgba(255, 255, 255, 0.12);
+  --color-hairline-soft: rgba(255, 255, 255, 0.06);
+  --color-success: #22C55E;
+
+  /* Fonts */
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
+  --font-display: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Border Radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 15px;
+  --radius-card: 20px;
+  --radius-card-lg: 30px;
+  --radius-pill: 100px;
+
+  /* Animations */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 30s linear infinite;
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-reverse {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
 }
 
-/* Headings with better hierarchy */
+/* =============================================
+   BASE LAYER
+   ============================================= */
+
+@layer base {
+  html {
+    @apply font-body antialiased;
+    font-feature-settings: "cv01", "cv05", "cv09", "cv11", "ss03", "ss07", "dlig";
+  }
+
+  body {
+    @apply bg-canvas text-ink min-h-screen;
+  }
+}
+
+/* =============================================
+   COMPONENT LAYER
+   ============================================= */
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-5 py-2.5 bg-ink text-canvas text-sm font-medium rounded-pill transition-all duration-200 cursor-pointer border-none no-underline;
+    letter-spacing: -0.14px;
+  }
+
+  .btn-primary:hover {
+    @apply opacity-90 scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-5 py-2.5 bg-surface-1 text-ink text-sm font-medium rounded-pill transition-all duration-200 cursor-pointer border-none no-underline;
+    letter-spacing: -0.14px;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-surface-2 scale-[0.98];
+  }
+
+  .card-surface {
+    @apply bg-surface-1 rounded-card p-6 transition-colors duration-300;
+  }
+
+  .card-surface:hover {
+    @apply bg-surface-2;
+  }
+
+  .card-featured {
+    @apply bg-surface-2 rounded-card p-6;
+  }
+
+  .card-gradient-violet {
+    @apply rounded-card-lg p-8;
+    background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+  }
+
+  .card-gradient-magenta {
+    @apply rounded-card-lg p-8;
+    background: linear-gradient(135deg, #EC4899 0%, #BE185D 100%);
+  }
+
+  .card-gradient-orange {
+    @apply rounded-card-lg p-8;
+    background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+  }
+
+  .grain-overlay {
+    @apply relative;
+  }
+
+  .grain-overlay::before {
+    content: "";
+    @apply absolute inset-0 pointer-events-none z-[1];
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
+  .section-heading {
+    @apply text-ink font-medium tracking-tight text-center mb-12;
+    font-size: clamp(24px, 2.5vw, 32px);
+    line-height: 1.13;
+    letter-spacing: -1px;
+  }
+
+  .display-hero {
+    @apply text-ink font-medium;
+    font-size: clamp(48px, 8vw, 110px);
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+  }
+}
+
+/* =============================================
+   PROSE STYLES (Blog/Docs)
+   ============================================= */
+
+.prose {
+  @apply text-ink-muted leading-relaxed;
+  max-width: none;
+  font-size: 15px;
+  letter-spacing: -0.15px;
+}
+
 .prose h1 {
-  @apply text-white font-bold text-3xl mt-8 mb-6 pb-3 border-b border-gray-700;
+  @apply text-ink font-medium mt-8 mb-6 pb-3 border-b border-hairline;
+  font-size: 32px;
+  letter-spacing: -1px;
 }
 
 .prose h2 {
-  @apply text-white font-bold text-2xl mt-8 mb-4 pb-2 border-b border-gray-800;
+  @apply text-ink font-medium text-2xl mt-8 mb-4 pb-2 border-b border-hairline-soft;
+  letter-spacing: -0.8px;
 }
 
 .prose h3 {
-  @apply text-white font-semibold text-xl mt-6 mb-3;
+  @apply text-ink font-semibold text-xl mt-6 mb-3;
+  letter-spacing: -0.5px;
 }
 
 .prose h4 {
-  @apply text-gray-100 font-semibold text-lg mt-4 mb-2;
+  @apply text-ink font-semibold text-lg mt-4 mb-2;
+  letter-spacing: -0.3px;
 }
 
 .prose h5, .prose h6 {
-  @apply text-gray-200 font-medium mt-3 mb-2;
+  @apply text-ink font-medium mt-3 mb-2;
 }
 
-/* Paragraphs and text */
 .prose p {
   @apply my-4 leading-7;
 }
 
 .prose strong {
-  @apply text-white font-semibold;
+  @apply text-ink font-semibold;
 }
 
 .prose em {
-  @apply text-gray-200 italic;
+  @apply text-ink italic;
 }
 
 /* Links */
 .prose a {
-  @apply text-blue-400 hover:text-blue-300 underline decoration-blue-500/30 hover:decoration-blue-400/50 transition-all duration-200;
+  @apply text-accent no-underline transition-opacity duration-200;
 }
 
 .prose a:hover {
-  @apply bg-blue-500/10 px-1 rounded;
+  @apply opacity-80 underline;
 }
 
-/* Inline code - improved readability */
+/* Inline code */
 .prose code:not(pre code) {
-  @apply bg-gray-800 text-green-300 px-2 py-1 rounded text-sm font-mono border border-gray-700;
-  font-size: 0.9em;
+  @apply bg-surface-1 text-ink px-2 py-0.5 rounded-sm text-sm font-mono border border-hairline;
 }
 
-/* Code blocks - enhanced styling */
+/* Code blocks */
 .prose pre {
-  @apply bg-gray-900 border border-gray-700 rounded-lg overflow-x-auto my-6 shadow-xl;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  @apply bg-surface-1 border border-hairline rounded-md overflow-x-auto my-6;
   white-space: pre !important;
 }
 
 .prose pre code {
-  @apply text-gray-200 text-sm leading-6 font-mono block p-4;
+  @apply text-ink-muted text-sm leading-6 font-mono block p-4;
   background: none !important;
   border: none !important;
   border-radius: 0 !important;
-  font-size: 0.875rem;
   white-space: pre !important;
   display: block !important;
 }
@@ -75,222 +217,140 @@
 /* Language label for code blocks */
 .prose pre[data-language]::before {
   content: attr(data-language);
-  @apply absolute top-2 right-3 text-xs text-gray-400 uppercase font-semibold;
+  @apply absolute top-2 right-3 text-xs text-ink-muted uppercase font-semibold;
   position: relative;
   float: right;
   margin-bottom: -1.5rem;
   z-index: 10;
 }
 
-/* Syntax highlighting improvements */
-.prose pre .token.comment {
-  @apply text-gray-500 italic;
-}
-
-.prose pre .token.string {
-  @apply text-green-400;
-}
-
-.prose pre .token.number {
-  @apply text-blue-400;
-}
-
-.prose pre .token.keyword {
-  @apply text-purple-400 font-semibold;
-}
-
-.prose pre .token.function {
-  @apply text-yellow-400;
-}
-
-.prose pre .token.operator {
-  @apply text-pink-400;
-}
+/* Syntax highlighting */
+.prose pre .token.comment { @apply text-ink-muted italic; opacity: 0.6; }
+.prose pre .token.string { color: #a5d6ff; }
+.prose pre .token.number { color: #79c0ff; }
+.prose pre .token.keyword { color: #ff7b72; @apply font-semibold; }
+.prose pre .token.function { color: #d2a8ff; }
+.prose pre .token.operator { color: #ff7b72; }
 
 /* Lists */
 .prose ul, .prose ol {
   @apply my-4 pl-6 space-y-2;
 }
 
-.prose ul {
-  @apply list-disc;
-}
+.prose ul { @apply list-disc; }
+.prose ol { @apply list-decimal; }
+.prose li { @apply leading-6; }
+.prose li > p { @apply my-2; }
 
-.prose ol {
-  @apply list-decimal;
-}
-
-.prose li {
-  @apply leading-6;
-}
-
-.prose li > p {
-  @apply my-2;
-}
-
-/* Nested lists */
 .prose ul ul, .prose ol ol {
   @apply mt-2 mb-2;
 }
 
 /* Blockquotes */
 .prose blockquote {
-  @apply border-l-4 border-blue-600 pl-6 py-2 my-6 bg-blue-950/20 rounded-r-lg;
+  @apply border-l-4 border-accent pl-6 py-2 my-6 rounded-r-md;
+  background: rgba(0, 153, 255, 0.05);
 }
 
 .prose blockquote p {
-  @apply text-gray-200 italic text-lg my-2;
+  @apply text-ink italic text-lg my-2;
 }
 
 .prose blockquote cite {
-  @apply text-gray-400 text-sm not-italic;
+  @apply text-ink-muted text-sm not-italic;
 }
 
-/* Tables - enhanced for better readability */
+/* Tables */
 .prose table {
-  @apply w-full border-collapse my-6 text-sm;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  @apply w-full border-collapse my-6 text-sm bg-surface-1 overflow-hidden;
+  border-radius: var(--radius-md);
 }
 
-.prose thead {
-  @apply bg-gray-800;
-}
+.prose thead { @apply bg-surface-2; }
 
 .prose th {
-  @apply px-4 py-3 text-left font-semibold text-white border-b border-gray-600;
+  @apply px-4 py-3 text-left font-semibold text-ink border-b border-hairline;
 }
 
 .prose td {
-  @apply px-4 py-3 border-b border-gray-700 text-gray-300;
+  @apply px-4 py-3 border-b border-hairline-soft text-ink-muted;
 }
 
-.prose tr:last-child td {
-  @apply border-b-0;
-}
-
-.prose tbody tr:nth-child(even) {
-  @apply bg-gray-800/30;
-}
+.prose tr:last-child td { @apply border-b-0; }
 
 .prose tbody tr:hover {
-  @apply bg-gray-700/50 transition-colors duration-150;
+  @apply bg-surface-2 transition-colors duration-150;
 }
 
-/* Table code cells */
 .prose table code {
-  @apply bg-gray-700 text-green-300 px-2 py-1 text-xs;
+  @apply bg-surface-2 text-ink px-2 py-0.5 text-xs;
 }
 
 /* Horizontal rules */
-.prose hr {
-  @apply border-gray-700 my-8;
-}
+.prose hr { @apply border-hairline my-8; }
 
 /* Images */
-.prose img {
-  @apply rounded-lg shadow-lg my-6;
-}
+.prose img { @apply rounded-lg my-6; }
 
 /* Keyboard shortcuts */
 .prose kbd {
-  @apply bg-gray-800 border border-gray-600 rounded px-2 py-1 text-xs font-mono text-gray-200;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  @apply bg-surface-1 border border-hairline rounded-xs px-2 py-0.5 text-xs font-mono text-ink;
 }
 
 /* Callout boxes */
-.prose .callout {
-  @apply p-4 my-6 rounded-lg border-l-4;
-}
+.prose .callout { @apply p-4 my-6 rounded-md border-l-4; }
+.prose .callout.info { @apply bg-accent/5 border-accent text-ink; }
+.prose .callout.warning { @apply bg-yellow-500/5 border-yellow-500 text-ink; }
+.prose .callout.error { @apply bg-red-500/5 border-red-500 text-ink; }
+.prose .callout.success { @apply bg-success/5 border-success text-ink; }
 
-.prose .callout.info {
-  @apply bg-blue-950/30 border-blue-500 text-blue-100;
-}
-
-.prose .callout.warning {
-  @apply bg-yellow-950/30 border-yellow-500 text-yellow-100;
-}
-
-.prose .callout.error {
-  @apply bg-red-950/30 border-red-500 text-red-100;
-}
-
-.prose .callout.success {
-  @apply bg-green-950/30 border-green-500 text-green-100;
-}
-
-/* Code copy button container */
-.prose .code-block-wrapper {
-  @apply relative;
-}
+/* Code copy button */
+.prose .code-block-wrapper { @apply relative; }
 
 .prose .copy-button {
-  @apply absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-2 py-1 rounded text-xs transition-all duration-200 opacity-0 group-hover:opacity-100;
+  @apply absolute top-2 right-2 bg-surface-2 text-ink-muted hover:text-ink px-2 py-1 rounded-sm text-xs transition-all duration-200 opacity-0;
 }
 
-.prose pre:hover .copy-button {
-  @apply opacity-100;
-}
+.prose pre:hover .copy-button { @apply opacity-100; }
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .prose {
-    @apply text-sm;
-  }
-  
-  .prose h1 {
-    @apply text-2xl;
-  }
-  
-  .prose h2 {
-    @apply text-xl;
-  }
-  
-  .prose pre {
-    @apply text-xs;
-  }
-  
-  .prose table {
-    @apply text-xs;
-  }
-  
-  .prose th, .prose td {
-    @apply px-2 py-2;
-  }
+  .prose { @apply text-sm; }
+  .prose h1 { @apply text-2xl; }
+  .prose h2 { @apply text-xl; }
+  .prose pre { @apply text-xs; }
+  .prose table { @apply text-xs; }
+  .prose th, .prose td { @apply px-2 py-2; }
 }
 
-/* Focus styles for accessibility */
+/* Focus styles */
 .prose a:focus,
 .prose button:focus {
-  @apply outline-none ring-2 ring-blue-500 ring-offset-2 ring-offset-gray-900;
+  @apply outline-none ring-2 ring-accent/30 ring-offset-2 ring-offset-canvas;
 }
 
-/* Mermaid chart styling */
-.mermaid {
-  @apply text-center my-6;
+/* =============================================
+   UTILITIES
+   ============================================= */
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
 }
 
-/* Print styles */
+/* Mermaid */
+.mermaid { @apply text-center my-6; }
+
+/* Print */
 @media print {
-  .prose {
-    @apply text-black;
-  }
-  
-  .prose h1, .prose h2, .prose h3, .prose h4 {
-    @apply text-black;
-  }
-  
-  .prose code {
-    @apply bg-gray-100 text-black border border-gray-300;
-  }
-  
-  .prose pre {
-    @apply bg-gray-100 border border-gray-300;
-  }
-  
-  .prose pre code {
-    @apply text-black;
-  }
+  .prose { @apply text-black; }
+  .prose h1, .prose h2, .prose h3, .prose h4 { @apply text-black; }
+  .prose code { @apply bg-gray-100 text-black border-gray-300; }
+  .prose pre { @apply bg-gray-100 border-gray-300; }
+  .prose pre code { @apply text-black; }
 }

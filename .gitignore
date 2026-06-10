@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# graphify
+.graphify-venv/
+.graphify_python
+graphify-out/

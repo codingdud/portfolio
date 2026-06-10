@@ -30,11 +30,11 @@ const MindMapPage: React.FC = () => {
 
 
   return (
-    <div className="fixed inset-0 w-full min-h-screen bg-[#181A20] flex flex-col">
+    <div className="fixed inset-0 w-full min-h-screen bg-canvas flex flex-col">
       <div className="flex items-center px-4 pt-4 mb-2">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center text-white hover:text-blue-400 transition"
+          className="flex items-center text-ink hover:text-accent transition"
           aria-label="Go back"
         >
           <FiArrowLeft className="w-6 h-6" />
@@ -48,7 +48,7 @@ const MindMapPage: React.FC = () => {
               style={{ background: '#fff' }}
             />
           )}
-          <h1 className="text-2xl font-bold text-white text-right pr-2">{title}</h1>
+          <h1 className="text-2xl font-bold text-ink text-right pr-2">{title}</h1>
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">

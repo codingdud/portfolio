@@ -9,15 +9,15 @@ function BlogCard({ post }: BlogCardProps) {
   return (
     <Link
       to={`/blog/${post.slug}`}
-      className="block p-6 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+      className="block card-surface"
     >
-      <h2 className="text-xl font-semibold mb-2">{post.frontmatter.title}</h2>
-      <p className="text-gray-400 mb-2">{post.frontmatter.date}</p>
+      <h2 className="text-ink text-xl font-semibold mb-2">{post.frontmatter.title}</h2>
+      <p className="text-ink-muted text-sm mb-3">{post.frontmatter.date}</p>
       <div className="flex flex-wrap gap-2">
         {post.frontmatter.tags.map((tag) => (
           <span
             key={tag}
-            className="bg-blue-600 text-xs px-2 py-1 rounded"
+            className="bg-surface-2 text-ink text-xs px-3 py-1 rounded-pill"
           >
             {tag}
           </span>

@@ -38,27 +38,26 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <div
       id={`project-${index}`}
-      data-animate
-      className={`group bg-gray-200/40 dark:bg-gray-800/40 backdrop-blur-lg rounded-2xl p-6 border border-gray-300/50 dark:border-gray-700/50 hover:border-blue-500/50 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-blue-500/10 ${
-        isVisible ? 'animate-fade-in-up' : 'opacity-0 translate-y-8'
-      } ${project.featured ? 'ring-1 ring-blue-500/30' : ''}`}
-      style={{ animationDelay: `${index * 0.1}s` }}
+      className={`group card-surface transition-all duration-500 hover:scale-[1.01] ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: `${index * 0.1}s` }}
     >
       {project.featured && (
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-          <span className="text-xs font-medium text-blue-400 uppercase tracking-wider">Featured</span>
+          <div className="w-1.5 h-1.5 bg-ink rounded-full" />
+          <span className="text-xs font-medium text-ink-muted uppercase tracking-wider">Featured</span>
         </div>
       )}
-      <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-blue-400 transition-colors">
+      <h3 className="text-xl font-bold text-ink mb-3 tracking-tight">
         {project.title}
       </h3>
-      <p className="text-gray-600 dark:text-gray-300 mb-4">{project.description}</p>
+      <p className="text-ink-muted mb-4">{project.description}</p>
       <div className="flex flex-wrap gap-2 mb-6">
         {project.tech.map((tech) => (
           <span
             key={tech}
-            className="px-2 py-1 bg-blue-200/30 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs rounded-full border border-blue-300/50 dark:border-blue-700/50"
+            className="px-3 py-1 bg-surface-2 text-ink text-xs rounded-pill"
           >
             {tech}
           </span>
@@ -68,7 +67,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         {project.github && (
           <a
             href={project.github}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-gray-300/50 dark:bg-gray-700/50 hover:bg-gray-400/50 dark:hover:bg-gray-600/50 text-gray-900 dark:text-white rounded-lg transition-colors text-sm"
+            className="btn-secondary gap-2 text-sm"
           >
             <Github className="w-4 h-4" />
             Code
@@ -77,7 +76,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
         {project.demo && (
           <a
             href={project.demo}
-            className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors text-sm"
+            className="btn-primary gap-2 text-sm"
           >
             <ExternalLink className="w-4 h-4" />
             Demo

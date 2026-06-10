@@ -1,27 +1,33 @@
-import { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import gsap from 'gsap';
+import { Outlet, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import Header from './Header';
 import Footer from './Home/Footer2';
 import ConversationWidget from './ConversationWidget';
+import { pageTransition, smoothTransition } from '../utils/animations';
+
+const CHATBOT_ENABLED = false;
 
 function Layout() {
-  useEffect(() => {
-    gsap.fromTo(
-      '.main-container',
-      { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
-    );
-  }, []);
+  const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-canvas text-ink font-body">
       <Header />
-      <ConversationWidget/>
-      <main className="main-container container mx-auto px-4 py-8">
-        <Outlet />
-      </main>
-        <Footer/>
+      {CHATBOT_ENABLED && <ConversationWidget />}
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={location.pathname}
+          className="main-container max-w-[1199px] mx-auto px-6 py-8"
+          variants={pageTransition}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          transition={smoothTransition}
+        >
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
+      <Footer/>
     </div>
   );
 }

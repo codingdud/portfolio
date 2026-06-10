@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { FiArrowLeft,FiArrowUp } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiArrowLeft, FiArrowUp } from 'react-icons/fi';
 import { MDXProvider } from '@mdx-js/react';
 import { mdxComponents } from '../components/MDXComponents';
-import gsap from 'gsap';
 
 function BlogPost() {
   const navigate = useNavigate();
@@ -25,32 +25,30 @@ function BlogPost() {
     loadPost();
   }, [slug]);
 
-  useEffect(() => {
-    gsap.fromTo(
-      '.post-content',
-      { opacity: 0, x: -50 },
-      { opacity: 1, x: 0, duration: 0.8, ease: 'power3.out' }
-    );
-  }, [PostComponent]);
-
   if (!PostComponent || !frontmatter) return <div>Loading...</div>;
 
   return (
     <div className="relative">
-      {/* Back Button (Bottom Left) */}
-      <button
+      <motion.button
         onClick={() => navigate(-1)}
-        className="sticky top-18 bg-gradient-to-r from-gray-700 to-gray-900 text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 z-50"
+        className="sticky top-18 bg-surface-1 hover:bg-surface-2 text-ink p-3 rounded-full shadow-lg transition-colors duration-300 z-50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         aria-label="Go back"
       >
         <FiArrowLeft/>
-      </button>
-      <article className="post-content prose prose-invert max-w-none">
+      </motion.button>
+      <motion.article
+        className="post-content prose prose-invert max-w-none"
+        initial={{ opacity: 0, x: -30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+      >
         <h1>{frontmatter.title}</h1>
-        <p className="text-gray-400 mb-4">Published on {frontmatter.date}</p>
+        <p className="text-ink-muted mb-4">Published on {frontmatter.date}</p>
         <div className="flex flex-wrap gap-2 mb-6">
           {frontmatter.tags.map((tag) => (
-            <span key={tag} className="bg-blue-600 text-xs px-2 py-1 rounded">
+            <span key={tag} className="bg-surface-2 text-ink text-xs px-3 py-1 rounded-pill">
               {tag}
             </span>
           ))}
@@ -58,15 +56,16 @@ function BlogPost() {
         <MDXProvider components={mdxComponents}>
           <PostComponent />
         </MDXProvider>
-      </article>
-      {/* Scroll to Top Button (Bottom Right) */}
-      <button
+      </motion.article>
+      <motion.button
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="sticky bottom-8 left-full  bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 z-50"
+        className="sticky bottom-8 left-full bg-surface-1 hover:bg-surface-2 text-ink p-3 rounded-full shadow-lg transition-colors duration-300 z-50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         aria-label="Scroll to top"
       >
         <FiArrowUp/>
-      </button>
+      </motion.button>
     </div>
   );
 }

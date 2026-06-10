@@ -1,35 +1,22 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import { motion } from 'framer-motion';
 
 export default function AnimationDemo() {
-  const boxRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const tl = gsap.timeline({ repeat: -1, yoyo: true });
-    tl.to(boxRef.current, {
-      rotation: 360,
-      scale: 1.2,
-      duration: 2,
-      ease: 'power2.inOut',
-    })
-      .to(boxRef.current, {
-        x: 100,
-        duration: 1,
-        ease: 'bounce.out',
-      })
-      .to(boxRef.current, {
-        x: 0,
-        duration: 1,
-        ease: 'bounce.out',
-      });
-  }, []);
-
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <div
-        ref={boxRef}
-        className="w-24 h-24 bg-blue-500 rounded-lg mx-auto"
-      ></div>
+    <div className="p-6 bg-surface-1 rounded-card">
+      <motion.div
+        className="w-24 h-24 bg-accent rounded-lg mx-auto"
+        animate={{
+          rotate: [0, 360],
+          scale: [1, 1.2, 1],
+          x: [0, 100, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: 'reverse',
+          ease: 'easeInOut',
+        }}
+      />
     </div>
   );
 }

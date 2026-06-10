@@ -37,15 +37,15 @@ const projects: Project[] = [
 
 export default function Projects() {
   return (
-    <section id="projects" className="py-20">
-      <div className="container mx-auto px-4 max-w-6xl">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+    <section id="projects" className="py-24">
+      <div className="max-w-[1199px] mx-auto px-6">
+        <h2 className="section-heading">
           Featured Projects
         </h2>
-        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto text-center mb-12">
+        <p className="text-ink-muted text-lg max-w-2xl mx-auto text-center mb-12">
           A collection of projects showcasing my expertise in full-stack development, mobile applications, and system optimization.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {projects.map((project, index) => (
             <ProjectCard key={project.title} project={project} index={index} />
           ))}
