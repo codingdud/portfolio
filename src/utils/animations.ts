@@ -67,8 +67,10 @@ export const bounceTransition: Transition = {
   stiffness: 200
 };
 
+// Quick opacity-only crossfade at the layout level — pages own their
+// entrance choreography, so no slide/long fade here to avoid a doubled effect.
 export const pageTransition: Variants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 }
 };

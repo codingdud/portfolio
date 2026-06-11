@@ -1,1 +1,57 @@
-{"success":true,"data":{"web":[{"url":"https://www.youtube.com/watch?v=DJaZUFK8Kv4","title":"Next.js Animated Portfolio Website with Framer Motion & Tailwind CSS","description":"Next.js portfolio project tutorial with Framer Motion and Tailwind CSS. Get Hostinger Discount: https://hostinger.com/lamadev Coupon Code: ...","position":1},{"url":"https://www.framer.com/blog/web-animation-tools/","title":"8 must-have web animation tools for designers - Framer Blog","description":"This article will guide you on selecting and combining these tools to create any web animation, from simple timelines to immersive experiences. ...","position":2},{"url":"https://www.reddit.com/r/framer/comments/1kf4ky5/visual_timeline_based_scroll_animations_plugin/","title":"r/framer - Visual / timeline based scroll animations plugin - Yes / No?","description":"Exploring ideas on building a visual / timeline based scroll animation plugin. specific flow sections where things need to animate in order.","position":3},{"url":"https://www.instagram.com/reel/DVMGqIGCCEQ/","title":"You can use my code „WHYSONSTUDIO“ for a free moth of Framer ...","description":"The cleanest minimal Framer template made for creative agencies, design studios & freelancers. Smooth scroll animations • Beautiful typography • ...","position":4},{"url":"https://www.youtube.com/watch?v=q53WEPbikXc","title":"Framer Timeline / Process Section Tutorial - 2025 - YouTube","description":"In this video we're going over my tutorial for building a timeline / process section in Framer. Find all links below Get this template: ...","position":5},{"url":"https://www.reddit.com/r/reactjs/comments/jnxcug/completed_my_portfolio_website_with_react_and/","title":"Completed my portfolio website with react and framer motion for ...","description":"I struggled a lot to come up with the design for the portfolio, but taking inspiration from other sites and design and designs on dribble, I am happy how it ...","position":6},{"url":"https://medium.com/@daxgama/scroll-linked-timeline-animation-with-framer-motion-d868b6b72f99","title":"Scroll Linked Timeline Animation with React and Framer Motion","description":"Scroll-linked animations involve a seamless connection between scroll progress and the progression of an animation, ensuring that visuals unfold in perfect ...","position":7},{"url":"https://motion.dev/","title":"Motion: JavaScript & React animation library","description":"Motion (prev Framer Motion) is a fast, production-grade animation library for React, JavaScript and Vue. Build smooth UI animations at a tiny footprint.","position":8}]},"id":"019eb2da-edef-76ee-adaa-7e1b73e2573a","creditsUsed":2}
+{
+  "success": true,
+  "data": {
+    "web": [
+      {
+        "url": "https://www.youtube.com/watch?v=DJaZUFK8Kv4",
+        "title": "Next.js Animated Portfolio Website with Framer Motion & Tailwind CSS",
+        "description": "Next.js portfolio project tutorial with Framer Motion and Tailwind CSS. Get Hostinger Discount: https://hostinger.com/lamadev Coupon Code: ...",
+        "position": 1
+      },
+      {
+        "url": "https://www.framer.com/blog/web-animation-tools/",
+        "title": "8 must-have web animation tools for designers - Framer Blog",
+        "description": "This article will guide you on selecting and combining these tools to create any web animation, from simple timelines to immersive experiences. ...",
+        "position": 2
+      },
+      {
+        "url": "https://www.reddit.com/r/framer/comments/1kf4ky5/visual_timeline_based_scroll_animations_plugin/",
+        "title": "r/framer - Visual / timeline based scroll animations plugin - Yes / No?",
+        "description": "Exploring ideas on building a visual / timeline based scroll animation plugin. specific flow sections where things need to animate in order.",
+        "position": 3
+      },
+      {
+        "url": "https://www.instagram.com/reel/DVMGqIGCCEQ/",
+        "title": "You can use my code „WHYSONSTUDIO“ for a free moth of Framer ...",
+        "description": "The cleanest minimal Framer template made for creative agencies, design studios & freelancers. Smooth scroll animations • Beautiful typography • ...",
+        "position": 4
+      },
+      {
+        "url": "https://www.youtube.com/watch?v=q53WEPbikXc",
+        "title": "Framer Timeline / Process Section Tutorial - 2025 - YouTube",
+        "description": "In this video we're going over my tutorial for building a timeline / process section in Framer. Find all links below Get this template: ...",
+        "position": 5
+      },
+      {
+        "url": "https://www.reddit.com/r/reactjs/comments/jnxcug/completed_my_portfolio_website_with_react_and/",
+        "title": "Completed my portfolio website with react and framer motion for ...",
+        "description": "I struggled a lot to come up with the design for the portfolio, but taking inspiration from other sites and design and designs on dribble, I am happy how it ...",
+        "position": 6
+      },
+      {
+        "url": "https://medium.com/@daxgama/scroll-linked-timeline-animation-with-framer-motion-d868b6b72f99",
+        "title": "Scroll Linked Timeline Animation with React and Framer Motion",
+        "description": "Scroll-linked animations involve a seamless connection between scroll progress and the progression of an animation, ensuring that visuals unfold in perfect ...",
+        "position": 7
+      },
+      {
+        "url": "https://motion.dev/",
+        "title": "Motion: JavaScript & React animation library",
+        "description": "Motion (prev Framer Motion) is a fast, production-grade animation library for React, JavaScript and Vue. Build smooth UI animations at a tiny footprint.",
+        "position": 8
+      }
+    ]
+  },
+  "id": "019eb2da-edef-76ee-adaa-7e1b73e2573a",
+  "creditsUsed": 2
+}

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Header from './Header';
 import Footer from './Home/Footer2';
 import ConversationWidget from './ConversationWidget';
-import { pageTransition, smoothTransition } from '../utils/animations';
+import { pageTransition } from '../utils/animations';
 
 const CHATBOT_ENABLED = false;
 
@@ -22,7 +22,7 @@ function Layout() {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={smoothTransition}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
         >
           <Outlet />
         </motion.main>
