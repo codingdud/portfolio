@@ -47,7 +47,7 @@ const HeroSection = () => {
     <section
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="grain-overlay bg-canvas min-h-[85vh] flex flex-col items-center justify-center px-6 relative overflow-hidden"
+      className="grain-overlay bg-canvas h-screen flex flex-col items-center justify-center px-6 relative overflow-hidden w-screen ml-[calc(50%-50vw)]"
     >
       {/* Ambient drifting orbs */}
       <motion.div
@@ -157,7 +157,7 @@ const HeroSection = () => {
 
       {/* Scroll hint */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-32 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1.6 }}
