@@ -9,6 +9,7 @@ import Docs from './pages/Docs';
 import DocPost from './pages/DocPost';
 import MindMapList from './pages/MindMapList';
 import MindMapPage from './pages/MindMapPage';
+import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/docs/" element={<Docs />} />
         <Route path="/docs/:slug" element={<DocPost />} />
         <Route path="/mindmaps" element={<MindMapList />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="/mindmap/:id" element={<MindMapPage />} />
       <Route path="*" element={<NotFound />} />

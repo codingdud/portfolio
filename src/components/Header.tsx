@@ -46,13 +46,12 @@ function Header() {
               <FiGithub className="w-4 h-4" />
               GitHub
             </motion.a>
-            <motion.a
-              href="#contact"
+            <Link
+              to="/contact"
               className="btn-primary"
-              whileTap={{ scale: 0.95 }}
             >
               Contact
-            </motion.a>
+            </Link>
           </div>
 
           <button
@@ -86,7 +85,7 @@ function Header() {
                 <a href="https://github.com/codingdud" target="_blank" rel="noopener noreferrer" className="btn-secondary gap-2">
                   <FiGithub className="w-4 h-4" /> GitHub
                 </a>
-                <a href="#contact" className="btn-primary">Contact</a>
+                <Link to="/contact" className="btn-primary">Contact</Link>
               </div>
             </motion.div>
           )}
